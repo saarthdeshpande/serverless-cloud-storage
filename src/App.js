@@ -7,13 +7,11 @@ import './App.css';
 import 'react-folder-tree/dist/style.css';
 
 
-class App extends React.Component{
-    constructor() {
-        super();
-    }
+class App extends React.Component {
 
     componentDidMount() {
         fetchFromS3()
+            .then(r => console.log(r))
     }
 
     onTreeStateChange = (state, event) => console.log(state, event);

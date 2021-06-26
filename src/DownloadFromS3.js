@@ -1,30 +1,30 @@
 import AWS_BUCKET from './config'
 
 
-const fetchFromS3 = async function (folder='') {
-    const { Contents } = await AWS_BUCKET.listObjectsV2({
-        Bucket: process.env.REACT_APP_S3_BUCKET,
-        Prefix: folder,
-        MaxKeys: 1000,
-        StartAfter: 'test-folder'
-    }).promise();
-    // let URLs = {};
-    // let folders = []
-    // await Promise.all((Contents || []).map(({ Key }) => {
-    //     if (Key.endsWith('/')) {
-    //         if (folders.includes(Key)) {
-    //
-    //         } else {
-    //             folders.push(Key)
-    //             URLs
-    //         }
-    //     }
-    //     console.log(folders)
-    //         // `https://${process.env.REACT_APP_S3_BUCKET}.s3${process.env.REACT_APP_S3_REGION}.amazonaws.com/${Key}`
-    //     }));
-    let keys = [];
-    Contents.map(content => keys.push(content.Key))
-    console.log(keys)
+const fetchFromS3 = function () {
+    const { REACT_APP_S3_BUCKET, REACT_APP_S3_REGION } = process.env
+    let folders = [];
+    let files = {}
+    AWS_BUCKET.listObjectsV2({
+        Bucket: REACT_APP_S3_BUCKET,
+        MaxKeys: 1000
+    }).eachPage((err, data) => {
+        if (err) console.log(err)
+        else if (data) {
+            return data.Contents.forEach(({ Key }) => {
+                if (Key.endsWith('/')) {
+                    folders.push(Key)
+                } else {
+                    files[Key] =
+                        `https://${REACT_APP_S3_BUCKET}.s3-${REACT_APP_S3_REGION}.amazonaws.com/${Key}`
+                }
+            })
+        }
+    });
+    return new Promise(function (resolve, reject) {
+        setTimeout(() => resolve({ folders, files }), 100)
+    })
 }
+
 
 export default fetchFromS3;
