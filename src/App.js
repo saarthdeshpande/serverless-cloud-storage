@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import FolderTree, { testData } from 'react-folder-tree';
+import UploadToS3 from "./components/UploadToS3";
+import fetchFromS3 from "./DownloadFromS3";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import './App.css';
+import 'react-folder-tree/dist/style.css';
+
+
+class App extends React.Component{
+    constructor() {
+        super();
+    }
+
+    componentDidMount() {
+        fetchFromS3()
+    }
+
+    onTreeStateChange = (state, event) => console.log(state, event);
+
+    render() {
+        return (
+            <div>
+                <UploadToS3 />
+                <FolderTree
+                    data={ testData }
+                    onChange={ this.onTreeStateChange }
+                    showCheckbox={ false }
+                    indentPixels={ 50 }
+                />
+            </div>
+
+        );
+    }
 }
 
 export default App;
