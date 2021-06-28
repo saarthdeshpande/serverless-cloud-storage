@@ -1,30 +1,74 @@
 import AWS_BUCKET from './config'
+import _ from 'underscore';
 
+let unique_id = 1;
+const config = {
+    Bucket: process.env.REACT_APP_S3_BUCKET,
+    MaxKeys: 1000
+}
 
-const fetchFromS3 = function () {
+function arrangeIntoTree(paths) {
+    var tree = [];
     const { REACT_APP_S3_BUCKET, REACT_APP_S3_REGION } = process.env
-    let folders = [];
-    let files = {}
-    AWS_BUCKET.listObjectsV2({
-        Bucket: REACT_APP_S3_BUCKET,
-        MaxKeys: 1000
-    }).eachPage((err, data) => {
-        if (err) console.log(err)
-        else if (data) {
-            return data.Contents.forEach(({ Key }) => {
-                if (Key.endsWith('/')) {
-                    folders.push(Key)
-                } else {
-                    files[Key] =
-                        `https://${REACT_APP_S3_BUCKET}.s3-${REACT_APP_S3_REGION}.amazonaws.com/${Key}`
+
+    _.each(paths, function(path) {
+        var pathParts = path.split('/');
+        pathParts.shift(); // Remove first blank element from the parts array.
+        var currentLevel = tree; // initialize currentLevel to root
+
+        _.each(pathParts, function(part) {
+            // check to see if the path already exists.
+            var existingPath = _.findWhere(currentLevel, {
+                name: part
+            });
+            if (existingPath) {
+                // The path to this item was already in the tree, so don't add it again.
+                // Set the current level to this path's children
+                currentLevel = existingPath.children;
+            } else {
+                var newPart = {
+                    name: part,
+                    children: [],
+                    _id: unique_id++,
+                    checked: 0,
+                    url: `https://${REACT_APP_S3_BUCKET}.s3-${REACT_APP_S3_REGION}.amazonaws.com${path}`
                 }
-            })
-        }
+                if ((path.match(/\//g) || []).length - 1 !== pathParts.indexOf(part)) {
+                    delete newPart['url']
+                    newPart['folder'] = true
+                }
+                else {
+                    delete newPart['children']
+                    newPart['folder'] = false
+                }
+                currentLevel.push(newPart);
+                currentLevel = newPart.children;
+            }
+        });
     });
-    return new Promise(function (resolve, reject) {
-        setTimeout(() => resolve({ folders, files }), 100)
-    })
+    return tree;
+}
+
+async function* fetchFromS3() {
+    do {
+        const data = await AWS_BUCKET.listObjectsV2(config).promise();
+        config.ContinuationToken = data.NextContinuationToken;
+        yield data;
+    } while (config.ContinuationToken);
 }
 
 
-export default fetchFromS3;
+async function getData() {
+    let files = []
+    for await (const data of fetchFromS3(config)) {
+        data.Contents.forEach(({ Key }) => {
+            if (!Key.endsWith('/')) {
+                files.push('/' + Key)
+            }
+        })
+    }
+    const tree = arrangeIntoTree(files)
+    return { name: 'root', children: tree, _id: 0, isOpen: true, checked: 0, folder: true }
+}
+
+export default getData;

@@ -5,10 +5,9 @@ import AWS_BUCKET from "../config";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-const UploadToS3 = () => {
+const UploadToS3 = (props) => {
     const [progress , setProgress] = useState(0);
     const [selectedFile, setSelectedFile] = useState(null);
-    const [modalShow, setModalShow] = useState(false);
 
     const handleFileInput = (e) => {
         setSelectedFile(e.target.files[0]);
@@ -31,7 +30,7 @@ const UploadToS3 = () => {
                 if (err) console.log(err)
                 else {
                     setTimeout(() => {
-                        setModalShow(false)
+                        props.handler()
                         setProgress(0)
                     }, 5000)
                 }
@@ -39,14 +38,14 @@ const UploadToS3 = () => {
             })
     }
 
-
+    console.log(props)
     return (
         <div>
-            <Button variant="primary" onClick={() => setModalShow(true)}>
+            <Button variant="primary" onClick={props.handler}>
                 Upload File / Folder
             </Button>
             <Modal
-                show={modalShow}
+                show={props.open}
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
@@ -67,7 +66,7 @@ const UploadToS3 = () => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={() => uploadFile(selectedFile)}>Upload</Button>
-                    <Button variant={'secondary'} onClick={() => setModalShow(false)}>Close</Button>
+                    <Button variant={'secondary'} onClick={props.handler}>Close</Button>
                 </Modal.Footer>
             </Modal>
         </div>
