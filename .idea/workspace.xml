@@ -6,8 +6,8 @@
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DownloadFromS3.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/DownloadFromS3.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/UploadToS3.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/UploadToS3.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -64,7 +64,8 @@
       <updated>1624712259341</updated>
       <workItem from="1624712260464" duration="9505000" />
       <workItem from="1624774097279" duration="486000" />
-      <workItem from="1624852172566" duration="8130000" />
+      <workItem from="1624852172566" duration="8186000" />
+      <workItem from="1624937896774" duration="4838000" />
     </task>
     <servers />
   </component>

@@ -3,10 +3,9 @@ import FolderTree from 'react-folder-tree';
 import UploadToS3 from "./components/UploadToS3";
 import getData from "./DownloadFromS3";
 
-import { FaRegTrashAlt } from 'react-icons/fa'
-
 import './App.css';
 import 'react-folder-tree/dist/style.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 class App extends React.Component {
@@ -20,15 +19,6 @@ class App extends React.Component {
         this.uploadHandler = this.uploadHandler.bind(this)
     }
 
-    DeleteIcon = ({ onClick: defaultOnClick, nodeData }) => {
-        const { path, name, checked, isOpen, url, ...restData } = nodeData;
-        const handleClick = () => {
-            console.log('icon clicked:', { path, name, url, ...restData });
-            defaultOnClick();
-        };
-
-        return <FaRegTrashAlt onClick={ handleClick } />;
-    };
 
     async componentDidMount() {
         const tree = await getData()

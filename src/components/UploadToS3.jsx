@@ -2,12 +2,14 @@ import React , {useState} from 'react';
 import { Modal, Button } from "react-bootstrap";
 import AWS_BUCKET from "../config";
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+
+import { isMobile, isBrowser } from "react-device-detect";
 
 
 const UploadToS3 = (props) => {
     const [progress , setProgress] = useState(0);
     const [selectedFile, setSelectedFile] = useState(null);
+    const [folder, setFolder] = useState(false)
 
     const handleFileInput = (e) => {
         setSelectedFile(e.target.files[0]);
@@ -37,8 +39,6 @@ const UploadToS3 = (props) => {
                 setSelectedFile(null)
             })
     }
-
-    console.log(props)
     return (
         <div>
             <Button variant="primary" onClick={props.handler}>
@@ -52,15 +52,61 @@ const UploadToS3 = (props) => {
             >
                 <Modal.Header>
                     <Modal.Title id="contained-modal-title-vcenter">
-                        Upload File / Folder
+                        {isMobile ? "Upload Files" : (
+                            <>
+                                Upload {folder ? "a Folder" : "Files"}
+                            </>
+                            )
+                        }
+                        {isBrowser &&
+                            <Button
+                                variant="dark"
+                                style={{display: 'inline-block', right: '15px', position: 'absolute'}}
+                                onClick={setFolder.bind(this, !folder)}
+                            >
+                                Upload {folder ? "Files instead?" : "a Folder instead?"}
+                            </Button>
+                        }
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div align={'center'}>
-                        <input type="file" onChange={handleFileInput}/>
-                        <div style={{ paddingTop: '20px'}}>
-                            File Upload Progress: <b style={{ color: progress === 100 ? 'green' : 'red' }}>{progress}%</b>
-                        </div>
+                        {isMobile ? (
+                                <React.Fragment>
+                                    <input type="file" id="ctrl" onChange={handleFileInput} multiple/>
+                                    <div style={{paddingTop: '20px'}}>
+                                        File Upload Progress:
+                                        <b style={{color: progress === 100 ? 'green' : 'red'}}>
+                                            {progress}%
+                                        </b>
+                                    </div>
+                                </React.Fragment>
+                            ) :
+                            (<React.Fragment>
+                                    {folder ?
+                                        <input
+                                            type="file"
+                                            onChange={handleFileInput}
+                                            webkitdirectory={""}
+                                            directory={""}
+                                            multiple
+                                        />
+                                        :
+                                        <input
+                                            type="file"
+                                            onChange={handleFileInput}
+                                            multiple
+                                        />
+                                    }
+                                    <div style={{paddingTop: '20px'}}>
+                                        {folder ? "Folder" : "File"} Upload Progress: &nbsp;
+                                        <b style={{color: progress === 100 ? 'green' : 'red'}}>
+                                            {progress}%
+                                        </b>
+                                    </div>
+                                </React.Fragment>
+                            )
+                        }
                         {progress === 100 && "Closing Modal in 5 seconds."}
                     </div>
                 </Modal.Body>
