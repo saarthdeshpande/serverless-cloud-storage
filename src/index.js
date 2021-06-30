@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+window.addEventListener("contextmenu", e => e.preventDefault());
 ReactDOM.render(
     <App />,
   document.getElementById('root')

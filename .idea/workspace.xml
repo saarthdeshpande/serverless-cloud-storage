@@ -2,10 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7793a0d1-0479-4e32-8e82-e869bc3594f5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/components/TreeNode.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/TreeView.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DownloadFromS3.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/DownloadFromS3.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/UploadToS3.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/UploadToS3.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
@@ -32,6 +35,7 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path" value="node" />
     <property name="nodejs_package_manager_path" value="yarn" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -65,7 +69,8 @@
       <workItem from="1624712260464" duration="9505000" />
       <workItem from="1624774097279" duration="486000" />
       <workItem from="1624852172566" duration="8186000" />
-      <workItem from="1624937896774" duration="4838000" />
+      <workItem from="1624937896774" duration="5497000" />
+      <workItem from="1625021246740" duration="12600000" />
     </task>
     <servers />
   </component>

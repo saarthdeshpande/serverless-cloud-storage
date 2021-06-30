@@ -31,15 +31,19 @@ function arrangeIntoTree(paths) {
                     children: [],
                     _id: unique_id++,
                     checked: 0,
-                    url: `https://${REACT_APP_S3_BUCKET}.s3-${REACT_APP_S3_REGION}.amazonaws.com${path}`
+                    url: `https://${REACT_APP_S3_BUCKET}.s3-${REACT_APP_S3_REGION}.amazonaws.com${path}`,
+                    abs_path: path.substring(1,),
                 }
                 if ((path.match(/\//g) || []).length - 1 !== pathParts.indexOf(part)) {
                     delete newPart['url']
                     newPart['folder'] = true
+                    newPart['abs_path'] = newPart['abs_path'].substring(0,path.lastIndexOf('/'))
+                    newPart['depth'] = (path.match(/\//g) || []).length - 2
                 }
                 else {
                     delete newPart['children']
                     newPart['folder'] = false
+                    newPart['depth'] = (path.match(/\//g) || []).length - 1
                 }
                 currentLevel.push(newPart);
                 currentLevel = newPart.children;
@@ -68,7 +72,8 @@ async function getData() {
         })
     }
     const tree = arrangeIntoTree(files)
-    return { name: 'root', children: tree, _id: 0, isOpen: true, checked: 0, folder: true }
+    return tree;
+    // return { name: 'root', children: tree, _id: 0, isOpen: true, checked: 0, folder: true }
 }
 
 export default getData;

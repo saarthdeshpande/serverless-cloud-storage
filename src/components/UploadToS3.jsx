@@ -8,42 +8,53 @@ import { isMobile, isBrowser } from "react-device-detect";
 
 const UploadToS3 = (props) => {
     const [progress , setProgress] = useState(0);
-    const [selectedFile, setSelectedFile] = useState(null);
+    const [selectedFiles, setSelectedFiles] = useState([]);
     const [folder, setFolder] = useState(false)
+    const [filesDone, setFilesDone] = useState(0)
 
     const handleFileInput = (e) => {
-        setSelectedFile(e.target.files[0]);
+        setSelectedFiles(e.target.files);
     }
 
-    const uploadFile = (file) => {
+    const uploadFile = () => {
 
-        const params = {
-            ACL: 'public-read',
-            Body: file,
-            Bucket: process.env.REACT_APP_S3_BUCKET,
-            Key: file.name
-        };
+        Array.from(selectedFiles)?.forEach((file) => {
+            const params = {
+                ACL: 'public-read',
+                Body: file,
+                Bucket: process.env.REACT_APP_S3_BUCKET,
+                Key: props.path + file.name
+            };
 
-        AWS_BUCKET.putObject(params)
-            .on('httpUploadProgress', (evt) => {
-                setProgress(Math.round((evt.loaded / evt.total) * 100))
-            })
-            .send((err) => {
-                if (err) console.log(err)
-                else {
-                    setTimeout(() => {
-                        props.handler()
-                        setProgress(0)
-                    }, 5000)
-                }
-                setSelectedFile(null)
-            })
+            AWS_BUCKET.putObject(params)
+                .on('httpUploadProgress', (evt) => {
+                    setProgress(Math.round((evt.loaded / evt.total) * 100))
+                })
+                .send((err) => {
+                    if (err) console.log(err)
+                    else {
+                        setFilesDone(filesDone + 1)
+                    }
+                })
+        })
+        setTimeout(() => {
+            props.handler()
+            setProgress(0)
+        }, 5000)
     }
     return (
-        <div>
-            <Button variant="primary" onClick={props.handler}>
-                Upload File / Folder
-            </Button>
+        <div style={{display: 'inline-block'}}>
+            <img
+                style={{
+                    display: 'inline-block',
+                    marginLeft: '15px',
+                    marginBottom: '3px',
+                    cursor: 'pointer'
+                }}
+                src={"https://img.icons8.com/material-outlined/24/000000/upload--v1.png"}
+                alt={'upload'}
+                onClick={props.handler}
+            />
             <Modal
                 show={props.open}
                 size="lg"
@@ -52,16 +63,27 @@ const UploadToS3 = (props) => {
             >
                 <Modal.Header>
                     <Modal.Title id="contained-modal-title-vcenter">
-                        {isMobile ? "Upload Files" : (
+                        {isMobile && (
                             <>
-                                Upload {folder ? "a Folder" : "Files"}
+                                Upload Files to <br/>
+                                <span style={{fontSize: '15px', color: 'grey'}}>
+                                    {props.path}
+                                </span>
+                            </>
+                            )}
+                        {isBrowser && (
+                            <>
+                                Upload {folder ? "a Folder" : "Files"} to <br/>
+                                <span style={{fontSize: '15px', color: 'grey'}}>
+                                    {props.path}
+                                </span>
                             </>
                             )
                         }
                         {isBrowser &&
                             <Button
                                 variant="dark"
-                                style={{display: 'inline-block', right: '15px', position: 'absolute'}}
+                                style={{display: 'inline-block', right: '15px', position: 'absolute', top: '33px'}}
                                 onClick={setFolder.bind(this, !folder)}
                             >
                                 Upload {folder ? "Files instead?" : "a Folder instead?"}
@@ -107,11 +129,12 @@ const UploadToS3 = (props) => {
                                 </React.Fragment>
                             )
                         }
-                        {progress === 100 && "Closing Modal in 5 seconds."}
+                        {filesDone > 0 && `${filesDone} files uploaded of ${selectedFiles.length}` }
+                        {filesDone > 0 && filesDone === selectedFiles.length && "Closing Modal in 5 seconds."}
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={() => uploadFile(selectedFile)}>Upload</Button>
+                    <Button onClick={uploadFile}>Upload</Button>
                     <Button variant={'secondary'} onClick={props.handler}>Close</Button>
                 </Modal.Footer>
             </Modal>
