@@ -1,9 +1,6 @@
 import AWS_BUCKET from "./config";
 
 const moveFile = (source, destination) => {
-    return;
-    if (source.abs_path === destination) // TODO: check if file / folder with source.name is present in destination directory
-        return;
     if (source.folder) {
         let params = {
             Bucket: process.env.REACT_APP_S3_BUCKET,

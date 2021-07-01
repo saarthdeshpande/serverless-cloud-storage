@@ -2,8 +2,10 @@ import React from 'react';
 import { Listing } from "@nteract/directory-listing";
 import getData from "./DownloadFromS3";
 import TreeView from './components/TreeView'
+import SearchField from "react-search-field"
 import TreeNode from './components/TreeNode'
 import {NotificationContainer} from 'react-notifications'
+import SearchList from './SearchList'
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -16,10 +18,16 @@ class App extends React.Component {
         super();
         this.state = {
             tree: [],
-            folderOpen: true
+            folderOpen: true,
+            arrayOfMatches: [],
+            searching: false,
+            tempArray: []
         }
         this.refreshTree = this.refreshTree.bind(this)
         this.toggleFolder = this.toggleFolder.bind(this)
+        this.searchInTree = this.searchInTree.bind(this)
+        this.handleOnChange = this.handleOnChange.bind(this)
+        this.handleSearch = this.handleSearch.bind(this)
     }
 
     toggleFolder = () => this.setState({ folderOpen: !this.state.folderOpen })
@@ -29,19 +37,58 @@ class App extends React.Component {
         this.setState({ tree })
     }
 
+    searchInTree = (arr, value) => {
+        arr.forEach(treeNode => {
+            if(treeNode.name.startsWith(value)) {
+                if(!treeNode.children) {
+                    let tempArray = this.state.arrayOfMatches;
+                    tempArray.push(treeNode);
+                    this.setState({arrayOfMatches:tempArray});
+                }
+            }
+            if(treeNode.children) {
+                this.searchInTree(treeNode.children,value);
+            }
+        });
+        return;
+    }
+
+    handleSearch = (value, event=null) => {
+        this.searchInTree(this.state.tree,value);
+        this.setState({tempArray:this.state.arrayOfMatches});
+        this.setState({arrayOfMatches:[]});
+    }
+
     async componentDidMount() {
         const tree = await getData()
-        this.setState({ tree })
+        this.setState({ tree });
+    }
+
+    handleOnChange = (value, event) => {
+        if(value.length) this.setState({searching:true});
+        else this.setState({searching:false});
+        this.handleSearch(value,event);
+        console.log(this.state.arrayOfMatches);
     }
 
     render() {
         return (
             <div>
-                {this.state.tree.length > 0 &&
-                    <Listing>
-                        <TreeNode abs_path={'/'} name={'root'} folder={true} refreshTree={this.refreshTree} handler={this.toggleFolder} root={true} />
-                        {this.state.folderOpen && <TreeView refreshTree={this.refreshTree} tree={this.state.tree}/>}
-                    </Listing>
+                <SearchField
+                    style={{margin:5}}
+                    placeholder="Search Files..."
+                    onEnter={this.handleSearch}
+                    onSearchClick={this.handleSearch}
+                    onChange={this.handleOnChange}
+                />
+                {
+                    this.state.searching?(<SearchList props={this.state.tempArray}/>):
+                    ((this.state.tree.length > 0) &&
+                        <Listing>
+                            <TreeNode abs_path={'/'} name={'root'} folder={true} refreshTree={this.refreshTree} handler={this.toggleFolder} root={true} />
+                            {this.state.folderOpen && <TreeView refreshTree={this.refreshTree} tree={this.state.tree}/>}
+                        </Listing>
+                    )
                 }
                 <NotificationContainer/>
             </div>
