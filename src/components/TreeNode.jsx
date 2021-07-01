@@ -2,13 +2,16 @@ import {useState} from 'react'
 import { Entry, Icon, Name } from "@nteract/directory-listing";
 import {Dropdown} from 'react-bootstrap'
 import UploadToS3 from "./UploadToS3";
+import DeleteFromS3 from "./DeleteFromS3";
 import { isMobile } from "react-device-detect";
 
+import './TreeNode.css'
 
-const TreeNode = ({name, folder, url, handler, abs_path, depth}) => {
+const TreeNode = ({name, folder, url, handler, abs_path, depth, refreshTree, children, root}) => {
     const [upload, toggleUpload] = useState(false)
+    const [deleteFile, toggleDelete] = useState(false)
     return (
-        <div align={'left'}  style={{marginLeft: `${isMobile ? depth*10 : depth*5}vw`}}>
+        <div align={'left'}  style={{marginLeft: `${isMobile ? depth*10 : depth*3}vw`}}>
             <Entry>
                 <Icon fileType={folder ? "directory" : "file"}/>
                 <Name>
@@ -24,7 +27,19 @@ const TreeNode = ({name, folder, url, handler, abs_path, depth}) => {
                             >
                                 {name}
                             </a>
-                            <UploadToS3 open={upload} handler={toggleUpload.bind(this, !upload)} path={abs_path} />
+                            <UploadToS3
+                                refreshTree={refreshTree}
+                                open={upload}
+                                handler={toggleUpload.bind(this, !upload)}
+                                path={abs_path}
+                            />
+                            {!root && <DeleteFromS3
+                                refreshTree={refreshTree}
+                                folder={folder}
+                                handler={toggleDelete.bind(this, !deleteFile)}
+                                open={deleteFile}
+                                path={abs_path}
+                            />}
                         </div>
 
                     }
@@ -35,14 +50,15 @@ const TreeNode = ({name, folder, url, handler, abs_path, depth}) => {
                                     background: 'none',
                                     border: 'none',
                                     outline: 'none',
-                                    color: 'black'
+                                    color: 'black',
                                 }}
                             >
                                 <span>{name}</span>
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <Dropdown.Item href={folder ? "#" : url}>Download</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2">Delete File {name}</Dropdown.Item>
+                                <Dropdown.Item onClick={toggleDelete.bind(this, !deleteFile)}>Delete File {name}</Dropdown.Item>
+                                <DeleteFromS3 refreshTree={refreshTree} folder={folder} handler={toggleDelete.bind(this, !deleteFile)} open={deleteFile} path={abs_path} />
                                 <Dropdown.Item href="#/action-3">Rename File {name}</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
