@@ -3,9 +3,11 @@ import { Listing } from "@nteract/directory-listing";
 import getData from "./DownloadFromS3";
 import TreeView from './components/TreeView'
 import TreeNode from './components/TreeNode'
+import {NotificationContainer} from 'react-notifications'
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-notifications/lib/notifications.css';
 
 
 class App extends React.Component {
@@ -41,8 +43,8 @@ class App extends React.Component {
                         {this.state.folderOpen && <TreeView refreshTree={this.refreshTree} tree={this.state.tree}/>}
                     </Listing>
                 }
+                <NotificationContainer/>
             </div>
-
         );
     }
 }
