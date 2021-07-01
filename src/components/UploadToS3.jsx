@@ -64,6 +64,7 @@ const UploadToS3 = (props) => {
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
+                onHide={props.handler}
             >
                 <Modal.Header>
                     <Modal.Title id="contained-modal-title-vcenter">
@@ -87,7 +88,7 @@ const UploadToS3 = (props) => {
                         {isBrowser &&
                             <Button
                                 variant="dark"
-                                style={{display: 'inline-block', right: '15px', position: 'absolute', top: '16px'}}
+                                style={{display: 'inline-block', right: '15px', position: 'absolute', top: '30px'}}
                                 onClick={setFolder.bind(this, !folder)}
                             >
                                 Upload {folder ? "Files instead?" : "a Folder instead?"}

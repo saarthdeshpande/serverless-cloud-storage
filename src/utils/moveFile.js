@@ -1,4 +1,4 @@
-import AWS_BUCKET from "./config";
+import AWS_BUCKET from "../config";
 
 const moveFile = (source, destination) => {
     if (source.folder) {

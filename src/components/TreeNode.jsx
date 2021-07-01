@@ -5,10 +5,10 @@ import UploadToS3 from "./UploadToS3";
 import DeleteFromS3 from "./DeleteFromS3";
 import { isMobile } from "react-device-detect";
 import { Draggable, Droppable } from 'react-drag-and-drop'
-
 import {NotificationManager} from 'react-notifications'
+import ViewFile from './ViewFile'
 
-import moveFile from '../MoveFile'
+import moveFile from '../utils/moveFile'
 
 import './TreeNode.css'
 
@@ -16,6 +16,7 @@ const TreeNode = (props) => {
     const {name, folder, url, handler, abs_path, depth, refreshTree, children, root} = props
     const [upload, toggleUpload] = useState(false)
     const [deleteFile, toggleDelete] = useState(false)
+    const [viewFile, toggleView] = useState(false)
     return (
         <div align={'left'}  style={{marginLeft: `${isMobile ? depth*10 : depth*3}vw`}}>
             <Entry>
@@ -97,9 +98,20 @@ const TreeNode = (props) => {
                                         color: 'black',
                                     }}
                                 >
-                                    <span>{name}</span>
+                                    <span>
+                                        {name}
+                                    </span>
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
+                                    <Dropdown.Item onClick={toggleView.bind(this, !viewFile)}>View</Dropdown.Item>
+                                    {!folder &&
+                                        <ViewFile
+                                            open={viewFile}
+                                            handler={toggleView.bind(this, !viewFile)}
+                                            name={name}
+                                            url={url}
+                                        />
+                                    }
                                     <Dropdown.Item href={folder ? "#" : url}>Download</Dropdown.Item>
                                     <Dropdown.Item onClick={toggleDelete.bind(this, !deleteFile)}>Delete File {name}</Dropdown.Item>
                                     <DeleteFromS3 refreshTree={refreshTree} folder={folder} handler={toggleDelete.bind(this, !deleteFile)} open={deleteFile} path={abs_path} />

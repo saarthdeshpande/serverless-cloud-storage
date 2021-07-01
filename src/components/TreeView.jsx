@@ -3,7 +3,7 @@ import TreeNode from './TreeNode'
 
 
 const TreeView = ({ tree, refreshTree }) => {
-    const [folderView, toggleFolderView] = useState(true)
+    const [folderView, toggleFolderView] = useState(false)
     return (
         <React.Fragment>
             {tree?.map(child => (

@@ -50,6 +50,7 @@ const DeleteFromS3 = (props) => {
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
+                onHide={props.handler}
             >
                 <Modal.Header>
                     <Modal.Title id="contained-modal-title-vcenter">
