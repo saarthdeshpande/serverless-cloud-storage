@@ -45,7 +45,7 @@ const TreeNode = (props) => {
                                             }}
                                         >
                                             <a
-                                                href={""}
+                                                href="#"
                                                 onClick={e => {
                                                     e.preventDefault()
                                                     handler()
@@ -58,7 +58,7 @@ const TreeNode = (props) => {
                                     }
                                     {root &&
                                         <a
-                                            href={""}
+                                            href="#"
                                             onClick={e => {
                                                 e.preventDefault()
                                                 handler()
