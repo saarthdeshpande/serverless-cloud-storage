@@ -15,15 +15,15 @@ const UploadToS3 = (props) => {
     const handleFileInput = (e) => {
         setSelectedFiles(e.target.files);
     }
+
     const uploadFile = () => {
+
         Array.from(selectedFiles)?.forEach((file) => {
-            const Key = props.path ? props.path + file.webkitRelativePath  : file.webkitRelativePath
-            console.log(Key)
             const params = {
                 ACL: 'public-read',
                 Body: file,
                 Bucket: process.env.REACT_APP_S3_BUCKET,
-                Key
+                Key: props.path + file.name
             };
 
             AWS_BUCKET.putObject(params)
@@ -39,9 +39,8 @@ const UploadToS3 = (props) => {
         })
         setTimeout(() => {
             props.handler()
-            props.refreshTree()
             setProgress(0)
-        }, 2000)
+        }, 5000)
     }
     return (
         <div style={{display: 'inline-block'}}>
@@ -84,7 +83,7 @@ const UploadToS3 = (props) => {
                         {isBrowser &&
                             <Button
                                 variant="dark"
-                                style={{display: 'inline-block', right: '15px', position: 'absolute', top: '16px'}}
+                                style={{display: 'inline-block', right: '15px', position: 'absolute', top: '33px'}}
                                 onClick={setFolder.bind(this, !folder)}
                             >
                                 Upload {folder ? "Files instead?" : "a Folder instead?"}
@@ -131,8 +130,7 @@ const UploadToS3 = (props) => {
                             )
                         }
                         {filesDone > 0 && `${filesDone} files uploaded of ${selectedFiles.length}` }
-                        <br/>
-                        {filesDone > 0 && filesDone === selectedFiles.length && "Closing Modal in 2 seconds."}
+                        {filesDone > 0 && filesDone === selectedFiles.length && "Closing Modal in 5 seconds."}
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
