@@ -6,12 +6,14 @@ import DeleteFromS3 from "./DeleteFromS3";
 import { isMobile } from "react-device-detect";
 import { Draggable, Droppable } from 'react-drag-and-drop'
 
+import {NotificationManager} from 'react-notifications'
+
 import moveFile from '../MoveFile'
 
 import './TreeNode.css'
 
 const TreeNode = (props) => {
-    const {name, folder, url, handler, abs_path, depth, refreshTree, root} = props
+    const {name, folder, url, handler, abs_path, depth, refreshTree, children, root} = props
     const [upload, toggleUpload] = useState(false)
     const [deleteFile, toggleDelete] = useState(false)
     return (
@@ -23,8 +25,14 @@ const TreeNode = (props) => {
                         <Droppable
                             types={['file', 'folder']}
                             onDrop={({file, folder}) => {
-                                file ? moveFile(JSON.parse(file), abs_path) : moveFile(JSON.parse(folder), abs_path)
-                                setTimeout(refreshTree, 2000)
+                                const data = file ? JSON.parse(file) : JSON.parse(folder)
+                                if (children.filter(child => child.name === data.name).length > 0)
+                                    return NotificationManager.error(`${data.name} already exists in ${abs_path}`,
+                                        'Name conflict!')
+                                else {
+                                    moveFile(data, abs_path)
+                                    setTimeout(refreshTree, 2000)
+                                }
                             }}
                         >
                                 <div>
