@@ -1,0 +1,64 @@
+import AWS_BUCKET from "./config";
+
+const moveFile = (source, destination) => {
+    return;
+    if (source.abs_path === destination) // TODO: check if file / folder with source.name is present in destination directory
+        return;
+    if (source.folder) {
+        let params = {
+            Bucket: process.env.REACT_APP_S3_BUCKET,
+            Prefix: source.abs_path
+        }
+        const moveMultiple = () => {
+            AWS_BUCKET.listObjectsV2(params, function(err, data) {
+                if (err) return console.log(err);
+
+                if (data.Contents.length === 0) return;
+
+                params = {Bucket: process.env.REACT_APP_S3_BUCKET};
+                params.Delete = {Objects:[]}
+
+                data.Contents.forEach(function(content) {
+                    console.log(content.Key.replace(source.abs_path, ''))
+                    params.Delete.Objects.push({Key: content.Key});
+                    AWS_BUCKET.copyObject({
+                        Bucket: process.env.REACT_APP_S3_BUCKET,
+                        CopySource: process.env.REACT_APP_S3_BUCKET + '/' + content.Key,
+                        Key: destination + '/' + source.name + content.Key.replace(source.abs_path, '')
+                    })
+                        .promise()
+                        .then(() =>
+                            AWS_BUCKET.deleteObject({
+                                Bucket: process.env.REACT_APP_S3_BUCKET,
+                                Key: content.Key
+                            }).promise()
+                        )
+                        .catch((e) => console.error(e))
+                });
+
+                AWS_BUCKET.deleteObjects(params, function(err, data) {
+                    if (err) return console.log(err);
+                    if(data.Contents?.length === 1000) moveMultiple();
+                    else return;
+                });
+            });
+        }
+        moveMultiple()
+    } else {
+        AWS_BUCKET.copyObject({
+            Bucket: process.env.REACT_APP_S3_BUCKET,
+            CopySource: process.env.REACT_APP_S3_BUCKET + '/' + source.abs_path,
+            Key: destination + '/' + source.name
+        })
+            .promise()
+            .then(() =>
+                AWS_BUCKET.deleteObject({
+                    Bucket: process.env.REACT_APP_S3_BUCKET,
+                    Key: source.abs_path
+                }).promise()
+            )
+            .catch((e) => console.error(e))
+    }
+}
+
+export default moveFile;

@@ -4,7 +4,7 @@ import React from 'react';
 
 
 const DeleteFromS3 = (props) => {
-    const deleteFile = async () => {
+    const deleteFile = () => {
         let params = {
             Bucket: process.env.REACT_APP_S3_BUCKET,
             Prefix: props.path
