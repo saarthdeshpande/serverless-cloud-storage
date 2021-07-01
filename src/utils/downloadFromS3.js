@@ -1,4 +1,4 @@
-import AWS_BUCKET from './config'
+import AWS_BUCKET from '../config'
 import _ from 'underscore';
 
 let unique_id = 1;

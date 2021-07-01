@@ -1,6 +1,6 @@
 import React from 'react';
 import { Listing } from "@nteract/directory-listing";
-import getData from "./DownloadFromS3";
+import getData from "./utils/downloadFromS3";
 import TreeView from './components/TreeView'
 import TreeNode from './components/TreeNode'
 import {NotificationContainer} from 'react-notifications'
