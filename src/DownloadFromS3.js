@@ -45,7 +45,7 @@ function arrangeIntoTree(paths) {
                     newPart['folder'] = false
                     newPart['depth'] = (path.match(/\//g) || []).length
                 }
-                currentLevel.push(newPart);
+                currentLevel?.push(newPart);
                 currentLevel = newPart.children;
             }
             index++;
@@ -74,7 +74,6 @@ async function getData() {
     }
     const tree = arrangeIntoTree(files)
     return tree;
-    // return { name: 'root', children: tree, _id: 0, isOpen: true, checked: 0, folder: true }
 }
 
 export default getData;

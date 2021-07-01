@@ -17,8 +17,11 @@ const UploadToS3 = (props) => {
     }
     const uploadFile = () => {
         Array.from(selectedFiles)?.forEach((file) => {
-            const Key = props.path ? props.path + file.webkitRelativePath  : file.webkitRelativePath
-            console.log(Key)
+            let Key;
+            if (folder)
+                Key = props.path ? props.path + '/' +  file.webkitRelativePath : file.webkitRelativePath
+            else
+                Key = props.path ? props.path + '/' + file.name : file.name
             const params = {
                 ACL: 'public-read',
                 Body: file,
