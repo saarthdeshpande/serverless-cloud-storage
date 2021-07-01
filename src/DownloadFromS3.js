@@ -15,7 +15,7 @@ function arrangeIntoTree(paths) {
         var pathParts = path.split('/');
         pathParts.shift(); // Remove first blank element from the parts array.
         var currentLevel = tree; // initialize currentLevel to root
-
+        let index = 1;
         _.each(pathParts, function(part) {
             // check to see if the path already exists.
             var existingPath = _.findWhere(currentLevel, {
@@ -34,20 +34,21 @@ function arrangeIntoTree(paths) {
                     url: `https://${REACT_APP_S3_BUCKET}.s3-${REACT_APP_S3_REGION}.amazonaws.com${path}`,
                     abs_path: path.substring(1,),
                 }
-                if ((path.match(/\//g) || []).length - 1 !== pathParts.indexOf(part)) {
+                if ((path.match(/\//g) || []).length !== index) {
                     delete newPart['url']
                     newPart['folder'] = true
-                    newPart['abs_path'] = newPart['abs_path'].substring(0,path.lastIndexOf('/'))
-                    newPart['depth'] = (path.match(/\//g) || []).length - 2
+                    newPart['abs_path'] = pathParts.slice(0,index).join('/')
+                    newPart['depth'] = (newPart['abs_path'].match(/\//g) || []).length + 1
                 }
                 else {
                     delete newPart['children']
                     newPart['folder'] = false
-                    newPart['depth'] = (path.match(/\//g) || []).length - 1
+                    newPart['depth'] = (path.match(/\//g) || []).length
                 }
                 currentLevel.push(newPart);
                 currentLevel = newPart.children;
             }
+            index++;
         });
     });
     return tree;
