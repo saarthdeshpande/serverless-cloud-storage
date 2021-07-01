@@ -40,7 +40,7 @@ class App extends React.Component {
 
     searchInTree = (arr, value) => {
         arr.forEach(treeNode => {
-            if(treeNode.name.includes(value)) {
+            if(treeNode.name.includes(value.toLowerCase())) {
                 if(!treeNode.children) {
                     let tempArray = this.state.arrayOfMatches;
                     tempArray.push(treeNode);
