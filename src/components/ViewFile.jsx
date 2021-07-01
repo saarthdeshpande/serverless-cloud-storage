@@ -27,7 +27,7 @@ class ViewButton extends React.Component{
         }
     }
 
-    async componentDidMount() {
+    componentDidMount() {
         pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
         fetch(this.props.url)
             .then(res => this.state.extension === '.zip' ? res.blob() : res.text())
@@ -59,7 +59,7 @@ class ViewButton extends React.Component{
     }
 
     stateHandler = () => {
-        this.setState({ text: null })
+        this.setState({ text: undefined })
         this.setState({ pageNumber: 1 })
         this.setState({ activeFile: null })
     }
@@ -186,12 +186,13 @@ class ViewButton extends React.Component{
                 )
             default:
                 return (
-                    <textarea rows="20" value={this.state.text} style={{color: 'black'}} disabled />
+                    <textarea rows="20" value={this.state.text} style={{color: 'white', backgroundColor: 'black'}} readOnly />
                 )
         }
     }
 
     render() {
+        console.log(this.state)
         return (
             <Modal
                 show={this.props.open}
