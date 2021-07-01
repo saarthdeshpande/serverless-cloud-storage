@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7793a0d1-0479-4e32-8e82-e869bc3594f5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/DeleteFromS3.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/TreeNode.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DownloadFromS3.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/DownloadFromS3.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TreeNode.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TreeNode.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TreeView.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TreeView.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/UploadToS3.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/UploadToS3.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +63,7 @@
       <workItem from="1624852172566" duration="8186000" />
       <workItem from="1624937896774" duration="5497000" />
       <workItem from="1625021246740" duration="12838000" />
-      <workItem from="1625110563075" duration="8598000" />
+      <workItem from="1625110563075" duration="9390000" />
     </task>
     <servers />
   </component>
