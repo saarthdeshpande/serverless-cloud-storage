@@ -6,7 +6,7 @@ import SearchField from "react-search-field"
 import TreeNode from './components/TreeNode'
 import {NotificationContainer} from 'react-notifications'
 
-import SearchList from './SearchList'
+import SearchList from './components/SearchList'
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -40,7 +40,7 @@ class App extends React.Component {
 
     searchInTree = (arr, value) => {
         arr.forEach(treeNode => {
-            if(treeNode.name.startsWith(value)) {
+            if(treeNode.name.includes(value)) {
                 if(!treeNode.children) {
                     let tempArray = this.state.arrayOfMatches;
                     tempArray.push(treeNode);
@@ -69,15 +69,13 @@ class App extends React.Component {
         if(value.length) this.setState({searching:true});
         else this.setState({searching:false});
         this.handleSearch(value,event);
-        console.log(this.state.arrayOfMatches);
     }
 
     render() {
         return (
-            <div>
+            <div align={'center'} style={{marginTop: '10px'}}>
                 <SearchField
-                    style={{margin:5}}
-                    placeholder="Search Files..."
+                    placeholder="Search Files"
                     onEnter={this.handleSearch}
                     onSearchClick={this.handleSearch}
                     onChange={this.handleOnChange}

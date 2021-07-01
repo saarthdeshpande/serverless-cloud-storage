@@ -16,7 +16,6 @@ const moveFile = (source, destination) => {
                 params.Delete = {Objects:[]}
 
                 data.Contents.forEach(function(content) {
-                    console.log(content.Key.replace(source.abs_path, ''))
                     params.Delete.Objects.push({Key: content.Key});
                     AWS_BUCKET.copyObject({
                         Bucket: process.env.REACT_APP_S3_BUCKET,
