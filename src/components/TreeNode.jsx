@@ -14,6 +14,7 @@ import moveFile from '../utils/moveFile'
 import './TreeNode.css'
 
 const TreeNode = (props) => {
+    const [folderView, toggleFolderView] = useState(false)
     const {name, folder, url, handler, abs_path, depth, refreshTree, children, root, parent} = props
     const [upload, toggleUpload] = useState(false)
     const [deleteFile, toggleDelete] = useState(false)
@@ -77,7 +78,7 @@ const TreeNode = (props) => {
         </form>
     )
     return (
-        <div align={'left'}  style={{marginLeft: `${isMobile ? depth*10 : depth*3}vw`}}>
+        <div align={'left'}  style={{marginLeft: `${isMobile ? depth*20 : depth*15}px`}}>
             <Entry>
                 <Icon fileType={folder ? "directory" : "file"}/>
                 <Name>
@@ -110,7 +111,7 @@ const TreeNode = (props) => {
                                                     href={""}
                                                     onClick={e => {
                                                         e.preventDefault()
-                                                        handler()
+                                                        toggleFolderView(!folderView)
                                                     }}
                                                     style={{display: 'inline-block', marginLeft: '10px'}}
                                                 >
@@ -186,6 +187,9 @@ const TreeNode = (props) => {
                     }
                 </Name>
             </Entry>
+            {folderView && folder && children.map(child =>
+                <TreeNode key={child._id} refreshTree={refreshTree} siblings={children} {...child} />
+            )}
         </div>
     )
 }
