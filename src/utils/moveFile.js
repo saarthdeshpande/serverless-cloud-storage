@@ -1,4 +1,4 @@
-import AWS_BUCKET from "./config";
+import AWS_BUCKET from "../config";
 
 const moveFile = (source, destination) => {
     if (source.folder) {
@@ -16,12 +16,12 @@ const moveFile = (source, destination) => {
                 params.Delete = {Objects:[]}
 
                 data.Contents.forEach(function(content) {
-                    console.log(content.Key.replace(source.abs_path, ''))
                     params.Delete.Objects.push({Key: content.Key});
                     AWS_BUCKET.copyObject({
                         Bucket: process.env.REACT_APP_S3_BUCKET,
                         CopySource: process.env.REACT_APP_S3_BUCKET + '/' + content.Key,
-                        Key: destination + '/' + source.name + content.Key.replace(source.abs_path, '')
+                        Key: destination === "/" ? source.name + content.Key.replace(source.abs_path, '') :
+                        destination + '/' + source.name + content.Key.replace(source.abs_path, '')
                     })
                         .promise()
                         .then(() =>
@@ -45,7 +45,7 @@ const moveFile = (source, destination) => {
         AWS_BUCKET.copyObject({
             Bucket: process.env.REACT_APP_S3_BUCKET,
             CopySource: process.env.REACT_APP_S3_BUCKET + '/' + source.abs_path,
-            Key: destination + '/' + source.name
+            Key: destination.endsWith("/") ? source.name : destination + '/' + source.name
         })
             .promise()
             .then(() =>

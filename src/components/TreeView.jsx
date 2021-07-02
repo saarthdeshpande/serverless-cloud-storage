@@ -1,16 +1,12 @@
-import React, {useState} from 'react'
+import React from 'react'
 import TreeNode from './TreeNode'
 
 
 const TreeView = ({ tree, refreshTree }) => {
-    const [folderView, toggleFolderView] = useState(true)
     return (
         <React.Fragment>
             {tree?.map(child => (
-                <div key={child._id}>
-                    <TreeNode refreshTree={refreshTree} handler={toggleFolderView.bind(this, !folderView)} {...child} />
-                    {folderView && child.folder && <TreeView refreshTree={refreshTree} tree={child.children}/>}
-                </div>
+                <TreeNode key={child._id} siblings={tree} refreshTree={refreshTree} {...child} />
                 )
             )}
         </React.Fragment>

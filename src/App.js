@@ -1,11 +1,11 @@
 import React from 'react';
 import { Listing } from "@nteract/directory-listing";
-import getData from "./DownloadFromS3";
+import getData from "./utils/downloadFromS3";
 import TreeView from './components/TreeView'
 import SearchField from "react-search-field"
 import TreeNode from './components/TreeNode'
 import {NotificationContainer} from 'react-notifications'
-import SearchList from './SearchList'
+import SearchList from './components/SearchList'
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -39,7 +39,8 @@ class App extends React.Component {
 
     searchInTree = (arr, value) => {
         arr.forEach(treeNode => {
-            if(treeNode.name.startsWith(value)) {
+            let nodeName = treeNode.name.toLowerCase();
+            if(nodeName.includes(value)) {
                 if(!treeNode.children) {
                     let tempArray = this.state.arrayOfMatches;
                     tempArray.push(treeNode);
@@ -65,31 +66,29 @@ class App extends React.Component {
     }
 
     handleOnChange = (value, event) => {
-        if(value.length) this.setState({searching:true});
+        if(value.toLowerCase().length) this.setState({searching:true});
         else this.setState({searching:false});
-        this.handleSearch(value,event);
-        console.log(this.state.arrayOfMatches);
+        this.handleSearch(value.toLowerCase(),event);
     }
 
     render() {
         return (
-            <div>
+            <div align={'center'} style={{marginTop: '10px'}}>
                 <SearchField
-                    style={{margin:5}}
-                    placeholder="Search Files..."
+                    placeholder="Search Files"
                     onEnter={this.handleSearch}
                     onSearchClick={this.handleSearch}
                     onChange={this.handleOnChange}
                 />
-                {
-                    this.state.searching?(<SearchList props={this.state.tempArray}/>):
-                    ((this.state.tree.length > 0) &&
-                        <Listing>
-                            <TreeNode abs_path={'/'} name={'root'} folder={true} refreshTree={this.refreshTree} handler={this.toggleFolder} root={true} />
-                            {this.state.folderOpen && <TreeView refreshTree={this.refreshTree} tree={this.state.tree}/>}
-                        </Listing>
-                    )
-                }
+                    {
+                        this.state.searching?(<SearchList props={this.state.tempArray}/>):
+                        ((this.state.tree.length >= 0) &&
+                            <Listing>
+                                <TreeNode abs_path={'/'} name={'root'} children={this.state.tree} folder={true} refreshTree={this.refreshTree} handler={this.toggleFolder} root={true} />
+                                {this.state.folderOpen && <TreeView refreshTree={this.refreshTree} tree={this.state.tree}/>}
+                            </Listing>
+                        )
+                    }
                 <NotificationContainer/>
             </div>
         );

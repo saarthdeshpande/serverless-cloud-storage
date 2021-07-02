@@ -1,4 +1,4 @@
-import AWS_BUCKET from './config'
+import AWS_BUCKET from '../config'
 import _ from 'underscore';
 
 let unique_id = 1;
@@ -33,6 +33,8 @@ function arrangeIntoTree(paths) {
                     checked: 0,
                     url: `https://${REACT_APP_S3_BUCKET}.s3-${REACT_APP_S3_REGION}.amazonaws.com${path}`,
                     abs_path: path.substring(1,),
+                    parent: pathParts.slice(0,index - 1).join('/') === "" ?
+                        "root" : pathParts.slice(0,index - 1).join('/')
                 }
                 if ((path.match(/\//g) || []).length !== index) {
                     delete newPart['url']
