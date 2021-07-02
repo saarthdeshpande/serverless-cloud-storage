@@ -11,7 +11,7 @@ class ViewButton extends React.Component{
         super(props);
         this.state = {
             activeFile: null,
-            extension: /(?:\.([^.]+))?$/.exec(this.props.name)[0],
+            extension: /(?:\.([^.]+))?$/.exec(this.props.name)[0].toLowerCase(),
             numPages: 0,
             pageNumber: 1,
             text: null,
@@ -81,7 +81,8 @@ class ViewButton extends React.Component{
     )
 
     selectComponent = () => {
-        const filter = this.state.activeFile ? /(?:\.([^.]+))?$/.exec(this.state.activeFile)[0] : this.state.extension
+        const filter = this.state.activeFile ? /(?:\.([^.]+))?$/.exec(this.state.activeFile)[0].toLowerCase()
+                        : this.state.extension
         switch(filter) {
             case (filter.match(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i) || {}).input:
                 return (
@@ -91,6 +92,17 @@ class ViewButton extends React.Component{
                             maxHeight: '50vh'
                         }}
                         alt={'file-image'}
+                    />
+                )
+            case (filter.match(/\.(avi|wmv|flv|mpg|mp4)$/i) || {}).input:
+                return (
+                    <video
+                        controls
+                        src={this.state.activeFile ? this.state.text : this.props.url}
+                        style={{
+                            maxHeight: '50vh'
+                        }}
+                        alt={'file-video'}
                     />
                 )
             case '.pdf':
@@ -151,12 +163,29 @@ class ViewButton extends React.Component{
                                 <Button
                                     onClick={() => {
                                         this.setState({ activeFile: zippedFile.filename })
-                                        if (/(?:\.([^.]+))?$/.exec(zippedFile.filename)[0] === '.pdf'
-                                            || (/(?:\.([^.]+))?$/.exec(zippedFile.filename)[0]).match(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i)) {
+                                        if (/(?:\.([^.]+))?$/.exec(zippedFile.filename)[0].toLowerCase() === '.pdf'
+                                            || (/(?:\.([^.]+))?$/.exec(zippedFile.filename)[0].toLowerCase())
+                                                .match(/\.(gif|jpe?g|tiff?|png|webp|bmp|avi|wmv|flv|mpg|mp4)$/i)
+                                        ) {
                                             zippedFile.getData(new window.zip.BlobWriter(), (text) => {
                                                 // text contains the entry data as a String
-                                                const type = /(?:\.([^.]+))?$/.exec(zippedFile.filename)[0] === '.pdf' ?
-                                                    'application/pdf' : `image/${zippedFile.filename.match(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i)}`
+                                                let type;
+                                                const filter = /(?:\.([^.]+))?$/.exec(zippedFile.filename)[0].toLowerCase()
+                                                switch(filter) {
+                                                    case '.pdf':
+                                                        type = 'application/pdf'
+                                                        break;
+                                                    case (filter.match(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i) || {}).input:
+                                                        type = `image/${zippedFile.filename.match(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i)}`
+                                                        break;
+                                                    case (filter.match(/\.(avi|wmv|flv|mpg|mp4)$/i) || {}).input:
+                                                        type = 'video/mp4'
+                                                        break;
+                                                    default:
+                                                        type = 'text/plain'
+                                                        break;
+
+                                                }
                                                 const pdfText = new Blob([text], { type });
                                                 this.setState({ text: URL.createObjectURL(pdfText) })
                                             }, function(current, total) {
