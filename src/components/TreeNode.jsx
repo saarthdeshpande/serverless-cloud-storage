@@ -106,7 +106,7 @@ const TreeNode = (props) => {
                             types={['file', 'folder']}
                             onDrop={({file, folder}) => {
                                 const data = file ? JSON.parse(file) : JSON.parse(folder)
-                                if (children?.filter(child => child.name === data.name).length > 0)
+                                if (children?.filter(child => child.name === data.name).length > 0 || data.abs_path === abs_path)
                                     return NotificationManager.error(
                                         <span style={{wordWrap: 'break-word', maxWidth: '80%'}}>
                                             {data.name} already exists in {abs_path === '/' ? "root" : abs_path}
