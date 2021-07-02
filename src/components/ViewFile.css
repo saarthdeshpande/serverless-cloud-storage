@@ -1,4 +1,9 @@
 .react-pdf__Page__canvas {
+    max-height: 100vh;
+    max-width: 30vw;
+}
+
+.react-pdf__Page__textContent {
     max-height: 75vh;
     max-width: 30vw;
 }
@@ -7,10 +12,18 @@
     max-width: 7%
 }
 
+.annotationLayer {
+    display: none;
+}
+
 @media only screen and (max-width: 600px) {
     .react-pdf__Page__canvas {
         max-width: 90vw;
         max-height: 60vh;
+    }
+    .react-pdf__Page__textContent {
+        max-height: 60vh;
+        max-width: 30vw;
     }
     .modal {
         max-height: 90vh;

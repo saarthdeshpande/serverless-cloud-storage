@@ -82,7 +82,7 @@ class App extends React.Component {
                 />
                     {
                         this.state.searching?(<SearchList props={this.state.tempArray}/>):
-                        ((this.state.tree.length > 0) &&
+                        ((this.state.tree.length >= 0) &&
                             <Listing>
                                 <TreeNode abs_path={'/'} name={'root'} children={this.state.tree} folder={true} refreshTree={this.refreshTree} handler={this.toggleFolder} root={true} />
                                 {this.state.folderOpen && <TreeView refreshTree={this.refreshTree} tree={this.state.tree}/>}

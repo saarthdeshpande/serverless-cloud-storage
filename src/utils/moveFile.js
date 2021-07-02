@@ -45,7 +45,7 @@ const moveFile = (source, destination) => {
         AWS_BUCKET.copyObject({
             Bucket: process.env.REACT_APP_S3_BUCKET,
             CopySource: process.env.REACT_APP_S3_BUCKET + '/' + source.abs_path,
-            Key: destination === "/" ? source.name : destination + '/' + source.name
+            Key: destination.endsWith("/") ? source.name : destination + '/' + source.name
         })
             .promise()
             .then(() =>

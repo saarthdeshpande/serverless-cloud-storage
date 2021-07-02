@@ -91,7 +91,7 @@ class ViewButton extends React.Component{
                         style={{
                             maxHeight: '50vh'
                         }}
-                        alt={'file-image'}
+                        alt={'file-display'}
                     />
                 )
             case (filter.match(/\.(avi|wmv|flv|mpg|mp4)$/i) || {}).input:
@@ -108,37 +108,40 @@ class ViewButton extends React.Component{
             case '.pdf':
                 return (
                     <div align={'center'}>
-                        <img
-                            src="https://img.icons8.com/fluent-systems-filled/96/000000/left.png"
-                            alt={'pdf-left'}
-                            style={{
-                                width: '2%',
-                                height: '2%',
-                                cursor: this.state.pageNumber > 1 ? 'pointer' : 'default',
-                                marginRight: '5px'
-                            }}
-                            onClick={() =>
-                                this.state.pageNumber > 1 ?
-                                    this.setState({ pageNumber: this.state.pageNumber - 1 }) :
-                                    ''
-                            }
-                        />
-                        Page {this.state.pageNumber} of {this.state.numPages}
-                        <img
-                            src="https://img.icons8.com/fluent-systems-filled/96/000000/right.png"
-                            alt={'pdf-right'}
-                            style={{
-                                width: '2%',
-                                height: '2%',
-                                cursor: this.state.pageNumber < this.state.numPages ? 'pointer' : 'default',
-                                marginLeft: '5px'
-                            }}
-                            onClick={() =>
-                                this.state.pageNumber < this.state.numPages ?
-                                    this.setState({ pageNumber: this.state.pageNumber + 1 })
-                                    : ''
-                            }
-                        />
+                        <div style={{display: 'inline-block', marginTop: '10px'}}>
+                            <img
+                                src="https://img.icons8.com/fluent-systems-filled/96/000000/left.png"
+                                alt={'pdf-left'}
+                                style={{
+                                    width: '10%',
+                                    height: '10%',
+                                    cursor: this.state.pageNumber > 1 ? 'pointer' : 'default',
+                                    marginRight: '7px',
+                                }}
+                                onClick={() =>
+                                    this.state.pageNumber > 1 ?
+                                        this.setState({ pageNumber: this.state.pageNumber - 1 }) :
+                                        ''
+                                }
+                            />
+                            <span>Page {this.state.pageNumber} of {this.state.numPages}</span>
+                            <img
+                                src="https://img.icons8.com/fluent-systems-filled/96/000000/right.png"
+                                alt={'pdf-right'}
+                                style={{
+                                    width: '10%',
+                                    height: '10%',
+                                    cursor: this.state.pageNumber < this.state.numPages ? 'pointer' : 'default',
+                                    marginLeft: '5px',
+                                    marginBottom: '1px'
+                                }}
+                                onClick={() =>
+                                    this.state.pageNumber < this.state.numPages ?
+                                        this.setState({ pageNumber: this.state.pageNumber + 1 })
+                                        : ''
+                                }
+                            />
+                        </div>
                         <Document
                             file={this.state.extension === '.zip' ? this.state.text : this.props.url}
                             onLoadSuccess={this.onDocumentLoadSuccess}
@@ -186,8 +189,8 @@ class ViewButton extends React.Component{
                                                         break;
 
                                                 }
-                                                const pdfText = new Blob([text], { type });
-                                                this.setState({ text: URL.createObjectURL(pdfText) })
+                                                const fileText = new Blob([text], { type });
+                                                this.setState({ text: URL.createObjectURL(fileText) })
                                             }, function(current, total) {
                                                 // onprogress callback
                                             });
@@ -230,7 +233,12 @@ class ViewButton extends React.Component{
                 centered
             >
                 <Modal.Header>
-                    {this.props.name}
+                    <span style={{
+                        maxWidth: '80%',
+                        wordWrap: 'break-word'
+                    }}>
+                        {this.props.name}
+                    </span>
                     <Button variant={'secondary'} onClick={() => {
                         this.stateHandler()
                         this.props.handler()
