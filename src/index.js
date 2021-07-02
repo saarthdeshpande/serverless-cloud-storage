@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import Routes from './Routes';
 import reportWebVitals from './reportWebVitals';
 
 window.addEventListener("contextmenu", e => e.preventDefault());
 ReactDOM.render(
-    <App />,
+    <Routes />,
   document.getElementById('root')
 );
 

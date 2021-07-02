@@ -2,6 +2,7 @@
   "name": "cloud",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "dependencies": {
     "@nteract/directory-listing": "^2.1.0",
     "@testing-library/jest-dom": "^5.11.4",
@@ -9,6 +10,8 @@
     "@testing-library/user-event": "^12.1.10",
     "aws-sdk": "^2.935.0",
     "bootstrap": "^5.0.2",
+    "firebase": "^8.7.0",
+    "husky": "^1.0.0-rc.13",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.1",
     "react-device-detect": "^1.17.0",
@@ -17,6 +20,7 @@
     "react-jupyter": "^0.1.0",
     "react-notifications": "^1.7.2",
     "react-pdf": "^5.3.0",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "react-search-field": "^1.2.1",
     "styled-components": "^5.3.0",
@@ -27,7 +31,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint src"
   },
   "eslintConfig": {
     "extends": [

@@ -1,4 +1,4 @@
-import AWS_BUCKET from "../config";
+import AWS_BUCKET from "../config/aws";
 import { Modal, Button } from "react-bootstrap";
 import React from 'react';
 

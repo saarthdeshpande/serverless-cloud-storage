@@ -1,6 +1,6 @@
 import React , {useState} from 'react';
 import { Modal, Button } from "react-bootstrap";
-import AWS_BUCKET from "../config";
+import AWS_BUCKET from "../config/aws";
 
 
 import { isMobile, isBrowser } from "react-device-detect";

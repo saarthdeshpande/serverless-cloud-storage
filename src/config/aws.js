@@ -9,4 +9,5 @@ const AWS_BUCKET = new AWS.S3({
     params: { Bucket: process.env.REACT_APP_S3_BUCKET},
     region: process.env.REACT_APP_S3_REGION,
 })
- export default AWS_BUCKET;
+
+export default AWS_BUCKET;
