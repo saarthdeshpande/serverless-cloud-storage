@@ -24,18 +24,20 @@ const TreeNode = (props) => {
     const fileRenameForm = () => (
         <form onSubmit={e => {
             e.preventDefault()
-            if (props.siblings.filter(sibling => sibling.name === fileName).length > 0)
+            if (fileName === name) {
+                toggleRename(!renameFile)
+            } else if (props.siblings.filter(sibling => sibling.name === fileName).length > 0)
                 NotificationManager.error(
                     <span style={{wordWrap: 'break-word', maxWidth: '80%'}}>
                         {fileName} already exists in {parent}
                     </span>,
                     'Name conflict!')
             else {
-                moveFile({name: fileName, abs_path, folder}, abs_path.replace(name, ''))
+                moveFile({name: fileName, abs_path, folder}, parent)
                 setTimeout(refreshTree, 2000)
                 NotificationManager.success(
                     <span style={{wordWrap: 'break-word', maxWidth: '80%'}}>
-                        {abs_path} renamed to ${parent + '/' + fileName}
+                        {abs_path} renamed to {parent + '/' + fileName}
                     </span>,
                     'Success!')
             }
@@ -46,7 +48,7 @@ const TreeNode = (props) => {
                 value={fileName}
                 style={{display: 'inline-block', marginLeft: '10px'}}
                 required
-                pattern="[0-9A-Za-z\.]+"
+                pattern="[\_0-9A-Za-z\.]+"
             />
             <Button
                 style={{
@@ -94,8 +96,13 @@ const TreeNode = (props) => {
             <Entry>
                 <Icon fileType={folder ? "directory" : "file"}/>
                 <Name>
-                    {folder &&
-                        <Droppable
+                    {folder && (
+                        renameFile ? (
+                            <>
+                                {fileRenameForm()}
+                            </>
+
+                    ) : (<Droppable
                             types={['file', 'folder']}
                             onDrop={({file, folder}) => {
                                 const data = file ? JSON.parse(file) : JSON.parse(folder)
@@ -112,101 +119,96 @@ const TreeNode = (props) => {
                                             {data.name} moved to {root ? `root/${data.name}` : abs_path + '/' + data.name}
                                         </span>,
                                         'Success!')
-                                    }
+                                }
                             }}
                         >
-                                <div>
-                                    {!root &&
-                                        <Draggable
-                                            type={'folder'}
-                                            data={JSON.stringify({name, abs_path, folder})}
-                                            style={{
-                                                display: 'inline-block',
-                                                marginTop: '5px',
-                                            }}
-                                        >
-                                            {!renameFile &&
-                                                <Button
-                                                    variant={'link'}
-                                                    onClick={e => {
-                                                        e.preventDefault()
-                                                        toggleFolderView(!folderView)
-                                                    }}
-                                                    style={{
-                                                        display: 'inline-block',
-                                                        marginLeft: '0px',
-                                                        wordWrap: 'break-word',
-                                                        textDecoration: 'none'
-                                                    }}
-                                                >
-                                                    {name}
-                                                </Button>
-                                            }
-                                        </Draggable>
-                                    }
-                                    {root &&
+                            <div>
+                                {!root &&
+                                    <Draggable
+                                        type={'folder'}
+                                        data={JSON.stringify({name, abs_path, folder})}
+                                        style={{
+                                            display: 'inline-block',
+                                            marginTop: '5px',
+                                        }}
+                                    >
                                         <Button
                                             variant={'link'}
                                             onClick={e => {
                                                 e.preventDefault()
-                                                handler()
+                                                toggleFolderView(!folderView)
                                             }}
                                             style={{
                                                 display: 'inline-block',
-                                                marginLeft: '10px',
+                                                marginLeft: '0px',
                                                 wordWrap: 'break-word',
                                                 textDecoration: 'none'
                                             }}
                                         >
                                             {name}
                                         </Button>
-                                    }
-                                    <UploadToS3
-                                        refreshTree={refreshTree}
-                                        open={upload}
-                                        handler={toggleUpload.bind(this, !upload)}
-                                        path={abs_path}
-                                    />
-                                    {!root && <DeleteFromS3
-                                        refreshTree={refreshTree}
-                                        folder={folder}
-                                        handler={toggleDelete.bind(this, !deleteFile)}
-                                        open={deleteFile}
-                                        path={abs_path}
-                                    />}
-                                </div>
+                                    </Draggable>
+                                }
+                                {root &&
+                                    <Button
+                                        variant={'link'}
+                                        onClick={e => {
+                                            e.preventDefault()
+                                            handler()
+                                        }}
+                                        style={{
+                                            display: 'inline-block',
+                                            marginLeft: '10px',
+                                            wordWrap: 'break-word',
+                                            textDecoration: 'none'
+                                        }}
+                                    >
+                                        {name}
+                                    </Button>
+                                }
+                                <UploadToS3
+                                    refreshTree={refreshTree}
+                                    open={upload}
+                                    handler={toggleUpload.bind(this, !upload)}
+                                    path={abs_path}
+                                />
+                                {!root &&
+                                    <>
+                                        <img
+                                            src="https://img.icons8.com/material-sharp/24/000000/edit-file.png"
+                                            onClick={toggleRename.bind(this, !renameFile)}
+                                            style={{
+                                                cursor: 'pointer',
+                                                marginLeft: '14px'
+                                            }}
+                                            alt={'rename-folder'}
+                                        />
+                                        <DeleteFromS3
+                                            refreshTree={refreshTree}
+                                            folder={folder}
+                                            handler={toggleDelete.bind(this, !deleteFile)}
+                                            open={deleteFile}
+                                            path={abs_path}
+                                        />
+                                    </>
+                                }
+                            </div>
                         </Droppable>
-
-                    }
+                        ))}
                     {!folder &&
                         (
                             renameFile ? (
                                 <Dropdown>
-                                    {!renameFile &&
-                                    <Dropdown.Toggle
-                                        style={{
-                                            background: 'none',
-                                            border: 'none',
-                                            outline: 'none',
-                                            color: 'black',
-                                            wordWrap: 'break-word'
-                                        }}
-                                    >
-                                            <span>
-                                                {name}
-                                            </span>
-                                    </Dropdown.Toggle>
-                                    }
-                                    {renameFile && fileRenameForm()}
+                                    {fileRenameForm()}
                                     <Dropdown.Menu>
                                         <Dropdown.Item onClick={toggleView.bind(this, !viewFile)}>View</Dropdown.Item>
                                         {!folder &&
-                                        <ViewFile
-                                            open={viewFile}
-                                            handler={toggleView.bind(this, !viewFile)}
-                                            name={name}
-                                            url={url}
-                                        />
+                                            <ViewFile
+                                                open={viewFile}
+                                                handler={toggleView.bind(this, !viewFile)}
+                                                name={name}
+                                                url={url}
+                                            />
                                         }
                                         <Dropdown.Item href={folder ? "" : url}>Download</Dropdown.Item>
                                         <Dropdown.Item onClick={toggleDelete.bind(this, !deleteFile)}>
@@ -227,7 +229,6 @@ const TreeNode = (props) => {
                             ) :  (
                             <Draggable type={'file'} data={JSON.stringify({name, abs_path, folder})}>
                                 <Dropdown>
-                                    {!renameFile &&
                                     <Dropdown.Toggle
                                         style={{
                                             background: 'none',
@@ -241,8 +242,6 @@ const TreeNode = (props) => {
                                             {name}
                                         </span>
                                     </Dropdown.Toggle>
-                                    }
-                                    {renameFile && fileRenameForm()}
                                     <Dropdown.Menu>
                                         <Dropdown.Item onClick={toggleView.bind(this, !viewFile)}>View</Dropdown.Item>
                                         <ViewFile

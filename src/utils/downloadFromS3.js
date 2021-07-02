@@ -30,7 +30,6 @@ function arrangeIntoTree(paths) {
                     name: part,
                     children: [],
                     _id: unique_id++,
-                    checked: 0,
                     url: `https://${REACT_APP_S3_BUCKET}.s3-${REACT_APP_S3_REGION}.amazonaws.com${path}`,
                     abs_path: path.substring(1,),
                     parent: pathParts.slice(0,index - 1).join('/') === "" ?
