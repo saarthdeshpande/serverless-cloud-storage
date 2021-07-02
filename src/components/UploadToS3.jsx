@@ -21,14 +21,13 @@ const UploadToS3 = (props) => {
             if (folder)
                 Key = props.path ? props.path + '/' +  file.webkitRelativePath : file.webkitRelativePath
             else
-                Key = props.path ? props.path + '/' + file.name : file.name
+                Key = props.path !== "/" ? props.path + '/' + file.name : file.name
             const params = {
                 ACL: 'public-read',
                 Body: file,
                 Bucket: process.env.REACT_APP_S3_BUCKET,
                 Key
             };
-
             AWS_BUCKET.putObject(params)
                 .on('httpUploadProgress', (evt) => {
                     setProgress(Math.round((evt.loaded / evt.total) * 100))

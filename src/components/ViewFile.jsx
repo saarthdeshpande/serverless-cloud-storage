@@ -192,7 +192,6 @@ class ViewButton extends React.Component{
     }
 
     render() {
-        console.log(this.state)
         return (
             <Modal
                 show={this.props.open}

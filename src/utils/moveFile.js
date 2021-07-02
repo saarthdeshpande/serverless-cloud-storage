@@ -20,7 +20,8 @@ const moveFile = (source, destination) => {
                     AWS_BUCKET.copyObject({
                         Bucket: process.env.REACT_APP_S3_BUCKET,
                         CopySource: process.env.REACT_APP_S3_BUCKET + '/' + content.Key,
-                        Key: destination + '/' + source.name + content.Key.replace(source.abs_path, '')
+                        Key: destination === "/" ? source.name + content.Key.replace(source.abs_path, '') :
+                        destination + '/' + source.name + content.Key.replace(source.abs_path, '')
                     })
                         .promise()
                         .then(() =>
@@ -44,7 +45,7 @@ const moveFile = (source, destination) => {
         AWS_BUCKET.copyObject({
             Bucket: process.env.REACT_APP_S3_BUCKET,
             CopySource: process.env.REACT_APP_S3_BUCKET + '/' + source.abs_path,
-            Key: destination + '/' + source.name
+            Key: destination === "/" ? source.name : destination + '/' + source.name
         })
             .promise()
             .then(() =>

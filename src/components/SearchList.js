@@ -16,7 +16,7 @@ const Search = ({props}) => {
                     return (
                         <div key={file._id} align={'left'}  style={{marginLeft: `${isMobile ? 10 : 3}vw`, display: 'flex', alignItems: 'center'}}>
                             <Entry>
-                                <Icon fileType={folder ? "directory" : "file"}/>
+                                <Icon fileType={"file"}/>
                                 <Name>
                                     <Dropdown>
                                         <Dropdown.Toggle
@@ -33,14 +33,12 @@ const Search = ({props}) => {
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu>
                                             <Dropdown.Item onClick={toggleView.bind(this, !viewFile)}>View</Dropdown.Item>
-                                            {!folder &&
-                                                <ViewFile
-                                                    open={viewFile}
-                                                    handler={toggleView.bind(this, !viewFile)}
-                                                    name={name}
-                                                    url={url}
-                                                />
-                                            }
+                                            <ViewFile
+                                                open={viewFile}
+                                                handler={toggleView.bind(this, !viewFile)}
+                                                name={name}
+                                                url={url}
+                                            />
                                             <Dropdown.Item href={url}>Download</Dropdown.Item>
                                             <Dropdown.Item onClick={toggleDelete.bind(this, !deleteFile)}>Delete File {name}</Dropdown.Item>
                                             <DeleteFromS3
