@@ -19,6 +19,7 @@ Host your own cloud storage at solely S3 rates, i.e., 50 TB /month at 1.6 INR (0
   " >> .env`
 * [Create and Register a Firebase project](https://firebase.google.com/docs/web/setup#create-firebase-project).
 * [Create a Firebase config object](https://firebase.google.com/docs/web/setup#config-object).
+* Create an allowed user for your config (`https://console.firebase.google.com/project/<project-name>/authentication/users`).
 * From the config object, note the `API_KEY`, `PROJECT_ID`, `SENDER_ID`, `APP_ID`, and `MEASUREMENT_ID`.
 * In the project directory, run: `cat "REACT_APP_FIREBASE_API_KEY=<YOUR_API_KEY> 
   REACT_APP_FIREBASE_PROJECT_ID=<YOUR_PROJECT_ID>
