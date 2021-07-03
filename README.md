@@ -34,7 +34,8 @@ Host your own cloud storage at solely S3 rates, i.e., 50 TB /month at 1.6 INR (0
 * `npm install`
 * `npm start`
 
-**Recommended IAM Policy**:
+<h3>Recommended IAM Policy:</h3>
+<h5 style="color: red">Only allow public access to buckets and objects granted through new access control lists (ACLs)</h5>
 
 ```json
 {
@@ -45,11 +46,7 @@ Host your own cloud storage at solely S3 rates, i.e., 50 TB /month at 1.6 INR (0
             "Sid": "Allow all kind of http requests originating from https://<YOUR_WEBSITE>",
             "Effect": "Allow",
             "Principal": "*",
-            "Action": [
-                "s3:List*",
-                "s3:Get*",
-                "s3:Put*"
-            ],
+            "Action": "s3:*",
             "Resource": [
                 "arn:aws:s3:::<BUCKET_NAME>/*",
                 "arn:aws:s3:::<BUCKET_NAME>"

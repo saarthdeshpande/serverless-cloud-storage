@@ -206,6 +206,7 @@ const TreeNode = (props) => {
                                             <ViewFile
                                                 open={viewFile}
                                                 handler={toggleView.bind(this, !viewFile)}
+                                                abs_path={abs_path}
                                                 name={name}
                                                 url={url}
                                             />
@@ -247,6 +248,7 @@ const TreeNode = (props) => {
                                         <ViewFile
                                             open={viewFile}
                                             handler={toggleView.bind(this, !viewFile)}
+                                            abs_path={abs_path}
                                             name={name}
                                             url={url}
                                         />

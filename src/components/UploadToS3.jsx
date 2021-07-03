@@ -27,13 +27,6 @@ const UploadToS3 = (props) => {
 
     const uploadFile = () => {
         setUploading(true)
-        const updateLocalData = setInterval(() => {
-            if (filesDone > 0 && filesDone === selectedFiles.length) {
-                props.refreshTree()
-                closeModal()
-                clearInterval(updateLocalData)
-            }
-        }, 2000)
         Array.from(selectedFiles)?.forEach((file) => {
             let Key;
             if (folder)
@@ -58,6 +51,14 @@ const UploadToS3 = (props) => {
                 })
         })
     }
+    (() => {
+        if (filesDone > 0 && filesDone === selectedFiles.length) {
+            setTimeout(() => {
+                props.refreshTree()
+                closeModal()
+            }, 2000)
+        }
+    })()
     return (
         <div style={{display: 'inline-block'}}>
             <img

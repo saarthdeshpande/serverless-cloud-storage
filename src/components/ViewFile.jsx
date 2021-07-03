@@ -3,6 +3,7 @@ import { Document, Page } from 'react-pdf';
 import { pdfjs } from 'react-pdf';
 import {Modal, Button} from "react-bootstrap";
 import Jupyter from 'react-jupyter'
+import AWS_BUCKET from '../config/aws'
 
 import './ViewFile.css'
 
@@ -27,10 +28,27 @@ class ViewButton extends React.Component{
         }
     }
 
+    getData = async () => {
+        try {
+            var getParams = {
+                Bucket: process.env.REACT_APP_S3_BUCKET, // your bucket name,
+                Key: this.props.abs_path // path to the object you're looking for
+            }
+            const data = await AWS_BUCKET.getObject(getParams).promise()
+            if (this.state.extension === '.zip') {
+                return data.Body
+            } else if (this.state.extension === '.pdf') {
+                return "data:application/pdf;base64," + data.Body.toString('base64')
+            }
+            return data.Body.toString('utf-8')
+        } catch (e) {
+            throw new Error(`Could not retrieve file from S3: ${e.message}`)
+        }
+    }
+
     componentDidMount() {
         pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-        fetch(this.props.url)
-            .then(res => this.state.extension === '.zip' ? res.blob() : res.text())
+        this.getData()
             .then(text => {
                 if (this.state.extension === '.zip') {
                     const blob = new Blob([text], { type: 'application/zip' })
@@ -143,7 +161,7 @@ class ViewButton extends React.Component{
                             />
                         </div>
                         <Document
-                            file={this.state.extension === '.zip' ? this.state.text : this.props.url}
+                            file={this.state.text}
                             onLoadSuccess={this.onDocumentLoadSuccess}
                         >
                             <Page pageNumber={this.state.pageNumber} />
@@ -218,7 +236,7 @@ class ViewButton extends React.Component{
                 )
             default:
                 return (
-                    <textarea rows="20" value={this.state.text} style={{color: 'white', backgroundColor: 'black'}} readOnly />
+                    <textarea rows="20" value={this.state.text || undefined} style={{color: 'white', backgroundColor: 'black'}} readOnly />
                 )
         }
     }
