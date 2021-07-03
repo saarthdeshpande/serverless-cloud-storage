@@ -6,6 +6,7 @@ import SearchField from "react-search-field"
 import TreeNode from './components/TreeNode'
 import {NotificationContainer} from 'react-notifications'
 import SearchList from './components/SearchList'
+import {Button} from 'react-bootstrap'
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -89,6 +90,10 @@ class App extends React.Component {
                             </Listing>
                         )
                     }
+                    <Button onClick={() => {
+                        localStorage.removeItem('refresh_token')
+                        window.location.href = '/login'
+                    }} style={{position: 'absolute', right: '15px', top: '10px'}}>Logout</Button>
                 <NotificationContainer/>
             </div>
         );
