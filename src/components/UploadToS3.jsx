@@ -31,8 +31,9 @@ const UploadToS3 = (props) => {
             AWS_BUCKET.putObject(params)
                 .on('httpUploadProgress', (evt) => {
                     setProgress(Math.round((evt.loaded / evt.total) * 100))
-                    if (evt.loaded === evt.total)
+                    if (evt.loaded === evt.total) {
                         setFilesDone(filesDone + 1)
+                    }
                 })
                 .send((err) => {
                     if (err) console.log(err)
