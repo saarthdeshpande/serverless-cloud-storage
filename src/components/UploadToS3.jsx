@@ -11,11 +11,22 @@ const UploadToS3 = (props) => {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [folder, setFolder] = useState(false)
     const [filesDone, setFilesDone] = useState(0)
+    const [uploading, setUploading] = useState(false)
 
     const handleFileInput = (e) => {
         setSelectedFiles(e.target.files);
     }
+
+    const closeModal = () => {
+        setProgress(0)
+        setSelectedFiles([])
+        setFilesDone(0)
+        setUploading(false)
+        props.handler()
+    }
+
     const uploadFile = () => {
+        setUploading(true)
         Array.from(selectedFiles)?.forEach((file) => {
             let Key;
             if (folder)
@@ -31,19 +42,23 @@ const UploadToS3 = (props) => {
             AWS_BUCKET.putObject(params)
                 .on('httpUploadProgress', (evt) => {
                     setProgress(Math.round((evt.loaded / evt.total) * 100))
-                    if (evt.loaded === evt.total)
-                        setFilesDone(filesDone + 1)
+                    if (evt.loaded === evt.total) {
+                        setFilesDone(filesDone => filesDone + 1)
+                    }
                 })
                 .send((err) => {
                     if (err) console.log(err)
                 })
         })
-        setTimeout(() => {
-            props.handler()
-            props.refreshTree()
-            setProgress(0)
-        }, 2000)
     }
+    (() => {
+        if (filesDone > 0 && filesDone === selectedFiles.length) {
+            setTimeout(() => {
+                props.refreshTree()
+                closeModal()
+            }, 2000)
+        }
+    })()
     return (
         <div style={{display: 'inline-block'}}>
             <img
@@ -62,7 +77,7 @@ const UploadToS3 = (props) => {
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
-                onHide={props.handler}
+                onHide={uploading ? () => null : props.handler}
             >
                 <Modal.Header>
                     <Modal.Title id="contained-modal-title-vcenter">
@@ -80,56 +95,58 @@ const UploadToS3 = (props) => {
                                 <span style={{fontSize: '15px', color: 'grey'}}>
                                     {props.path}
                                 </span>
+                                {!uploading && <Button
+                                    variant="dark"
+                                    style={{display: 'inline-block', right: '15px', position: 'absolute', top: '30px'}}
+                                    onClick={setFolder.bind(this, !folder)}
+                                >
+                                    Upload {folder ? "Files instead?" : "a Folder instead?"}
+                                </Button>}
                             </>
                             )
-                        }
-                        {isBrowser &&
-                            <Button
-                                variant="dark"
-                                style={{display: 'inline-block', right: '15px', position: 'absolute', top: '30px'}}
-                                onClick={setFolder.bind(this, !folder)}
-                            >
-                                Upload {folder ? "Files instead?" : "a Folder instead?"}
-                            </Button>
                         }
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div align={'center'}>
                         {isMobile ? (
-                                <React.Fragment>
-                                    <input type="file" id="ctrl" onChange={handleFileInput} multiple/>
+                                <form onSubmit={e => e.preventDefault()}>
+                                    {!uploading && <input required type="file" id="ctrl" onChange={handleFileInput} multiple/>}
                                     <div style={{paddingTop: '20px'}}>
                                         File Upload Progress:
                                         <b style={{color: progress === 100 ? 'green' : 'red'}}>
                                             {progress}%
                                         </b>
                                     </div>
-                                </React.Fragment>
+                                </form>
                             ) :
                             (<React.Fragment>
+                                <form onSubmit={e => e.preventDefault()}>
                                     {folder ?
-                                        <input
-                                            type="file"
-                                            onChange={handleFileInput}
-                                            webkitdirectory={""}
-                                            directory={""}
-                                            multiple
-                                        />
-                                        :
-                                        <input
-                                            type="file"
-                                            onChange={handleFileInput}
-                                            multiple
-                                        />
+                                            !uploading && <input
+                                                type="file"
+                                                onChange={handleFileInput}
+                                                webkitdirectory={""}
+                                                directory={""}
+                                                multiple
+                                                required
+                                            />
+                                            :
+                                            !uploading && <input
+                                                type="file"
+                                                onChange={handleFileInput}
+                                                multiple
+                                                required
+                                            />
                                     }
-                                    <div style={{paddingTop: '20px'}}>
-                                        {folder ? "Folder" : "File"} Upload Progress: &nbsp;
-                                        <b style={{color: progress === 100 ? 'green' : 'red'}}>
-                                            {progress}%
-                                        </b>
-                                    </div>
-                                </React.Fragment>
+                                </form>
+                                <div style={{paddingTop: '20px'}}>
+                                    {folder ? "Folder" : "File"} Upload Progress: &nbsp;
+                                    <b style={{color: progress === 100 ? 'green' : 'red'}}>
+                                        {progress}%
+                                    </b>
+                                </div>
+                            </React.Fragment>
                             )
                         }
                         {filesDone > 0 && `${filesDone} files uploaded of ${selectedFiles.length}` }
@@ -137,10 +154,10 @@ const UploadToS3 = (props) => {
                         {filesDone > 0 && filesDone === selectedFiles.length && "Closing Modal in 2 seconds."}
                     </div>
                 </Modal.Body>
-                <Modal.Footer>
+                {!uploading && <Modal.Footer>
                     <Button onClick={uploadFile}>Upload</Button>
-                    <Button variant={'secondary'} onClick={props.handler}>Close</Button>
-                </Modal.Footer>
+                    <Button variant={'secondary'} onClick={closeModal}>Close</Button>
+                </Modal.Footer>}
             </Modal>
         </div>
     )
