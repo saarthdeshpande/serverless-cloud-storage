@@ -8,6 +8,7 @@ import { Button } from 'react-bootstrap'
 import { Draggable, Droppable } from 'react-drag-and-drop'
 import {NotificationManager} from 'react-notifications'
 import ViewFile from './ViewFile'
+import AWS_BUCKET from '../config/aws'
 
 import moveFile from '../utils/moveFile'
 
@@ -21,6 +22,16 @@ const TreeNode = (props) => {
     const [viewFile, toggleView] = useState(false)
     const [renameFile, toggleRename] = useState(false)
     const [fileName, setFileName] = useState(name)
+
+    const getSignedUrl = () => {
+        const url = AWS_BUCKET.getSignedUrl('getObject', {
+            Bucket: process.env.REACT_APP_S3_BUCKET,
+            Key: abs_path,
+            Expires: 60 * 5
+        })
+        window.location.href = url
+    }
+
     const fileRenameForm = () => (
         <form onSubmit={e => {
             e.preventDefault()
@@ -211,7 +222,7 @@ const TreeNode = (props) => {
                                                 url={url}
                                             />
                                         }
-                                        <Dropdown.Item href={folder ? "" : url}>Download</Dropdown.Item>
+                                        <Dropdown.Item onClick={getSignedUrl}>Download</Dropdown.Item>
                                         <Dropdown.Item onClick={toggleDelete.bind(this, !deleteFile)}>
                                             Delete File {name}
                                         </Dropdown.Item>
@@ -252,7 +263,7 @@ const TreeNode = (props) => {
                                             name={name}
                                             url={url}
                                         />
-                                        <Dropdown.Item href={folder ? "#" : url}>Download</Dropdown.Item>
+                                        <Dropdown.Item onClick={getSignedUrl}>Download</Dropdown.Item>
                                         <Dropdown.Item onClick={toggleDelete.bind(this, !deleteFile)}>
                                             Delete File {name}
                                         </Dropdown.Item>
