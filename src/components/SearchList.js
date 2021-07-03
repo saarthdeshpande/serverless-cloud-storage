@@ -8,7 +8,6 @@ import ViewFile from './ViewFile'
 const Search = ({props}) => {
     const [deleteFile, toggleDelete] = useState(false)
     const [viewFile, toggleView] = useState(false)
-    console.log(props);
     return (
         <div>
             {

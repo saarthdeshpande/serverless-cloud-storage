@@ -39,6 +39,8 @@ class ViewButton extends React.Component{
                 return data.Body
             } else if (this.state.extension === '.pdf') {
                 return "data:application/pdf;base64," + data.Body.toString('base64')
+            } else if((this.state.extension.match(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i) || {}).input) {
+                return `data:image/${this.state.extension};base64,` + data.Body.toString('base64')
             }
             return data.Body.toString('utf-8')
         } catch (e) {
@@ -105,7 +107,7 @@ class ViewButton extends React.Component{
             case (filter.match(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i) || {}).input:
                 return (
                     <img
-                        src={this.state.activeFile ? this.state.text : this.props.url}
+                        src={this.state.text}
                         style={{
                             maxHeight: '50vh'
                         }}
@@ -116,7 +118,7 @@ class ViewButton extends React.Component{
                 return (
                     <video
                         controls
-                        src={this.state.activeFile ? this.state.text : this.props.url}
+                        src={this.state.text}
                         style={{
                             maxHeight: '50vh'
                         }}
