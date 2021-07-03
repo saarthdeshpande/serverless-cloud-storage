@@ -33,3 +33,35 @@ Host your own cloud storage at solely S3 rates, i.e., 50 TB /month at 1.6 INR (0
   " >> .env`
 * `npm install`
 * `npm start`
+
+**Recommended IAM Policy**:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Id": "http referer policy example",
+    "Statement": [
+        {
+            "Sid": "Allow all kind of http requests originating from https://<YOUR_WEBSITE>",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": [
+                "s3:List*",
+                "s3:Get*",
+                "s3:Put*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::<BUCKET_NAME>/*",
+                "arn:aws:s3:::<BUCKET_NAME>"
+            ],
+            "Condition": {
+                "StringLike": {
+                    "aws:Referer": [
+                        "https://<YOUR_WEBSITE>"
+                    ]
+                }
+            }
+        }
+    ]
+}
+```
