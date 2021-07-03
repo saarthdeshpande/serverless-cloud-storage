@@ -1,6 +1,6 @@
 # Self-Hosted Serverless Cloud Storage
 
-Host your own cloud storage at solely S3 rates, i.e., 50 TB /month at 1.6 INR (0.021 USD) per month.
+Host your own cloud storage at solely S3 rates, i.e., 50 TB /month at 1.6 INR/GB (~0.021 USD) per month.
 
 <div align="center">
   <img src="public/shscs.png" />
