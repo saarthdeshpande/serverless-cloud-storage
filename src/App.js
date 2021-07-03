@@ -92,7 +92,7 @@ class App extends React.Component {
                     }
                     <Button onClick={() => {
                         localStorage.removeItem('refresh_token')
-                        window.location.href = '/login'
+                        window.location.reload()
                     }} style={{position: 'absolute', right: '15px', top: '10px'}}>Logout</Button>
                 <NotificationContainer/>
             </div>
