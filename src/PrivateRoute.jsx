@@ -18,16 +18,9 @@ class PrivateRoute extends React.Component {
             },
             body: `grant_type=refresh_token&refresh_token=${localStorage.getItem('refresh_token')}`
         })
-            .then((response) => {
-                return new Promise((resolve) => response.json()
-                    .then((json) => resolve({
-                        status: response.status,
-                        ok: response.ok,
-                        json,
-                    })));
-            })
-            .then(({ status, json }) => {
-                if (status === 200) {
+            .then(r => r.json())
+            .then((r) => {
+                if (r.id_token) {
                     this.setState({ valid: true })
                     this.setState({ isLoading: false })
                 } else {
