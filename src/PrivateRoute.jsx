@@ -10,8 +10,8 @@ class PrivateRoute extends React.Component {
         }
     }
 
-    async componentDidMount() {
-        await fetch(`https://securetoken.googleapis.com/v1/token?key=${process.env.REACT_APP_FIREBASE_API_KEY}`, {
+    componentDidMount() {
+        fetch(`https://securetoken.googleapis.com/v1/token?key=${process.env.REACT_APP_FIREBASE_API_KEY}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'

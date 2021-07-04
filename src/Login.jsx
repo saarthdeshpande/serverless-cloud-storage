@@ -3,12 +3,12 @@ import {Modal, Form, Button} from 'react-bootstrap'
 import './config/firebase'
 import firebase from "firebase/app";
 import "firebase/auth";
-import {Redirect} from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 import {NotificationManager, NotificationContainer} from 'react-notifications'
 
 import 'react-notifications/lib/notifications.css';
 
-export default function Login() {
+function Login({ history }) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     return (
@@ -75,9 +75,11 @@ export default function Login() {
                         Login
                     </Button>
                 </Form>
-                {localStorage.getItem('refresh_token') && <Redirect to={'/'} />}
+                {localStorage.getItem('refresh_token') && history.push('/')}
             </Modal>
             <NotificationContainer />
         </div>
     )
 }
+
+export default withRouter(Login);
