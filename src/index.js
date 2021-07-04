@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Routes from './Routes';
+import Routes from './Routes.jsx';
 import reportWebVitals from './reportWebVitals';
 
 window.addEventListener("contextmenu", e => e.preventDefault());

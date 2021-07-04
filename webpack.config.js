@@ -1,38 +1,69 @@
-const nodeExternals = require('webpack-node-externals');
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const path = require("path")
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const webpack = require('webpack');
+const isDevelopment = false;
 
 module.exports = {
-    entry: './src/index.js',
-    output: {
-        filename: 'bundle.js',
-        path: path.join(__dirname, "dist/")
-    },
-    mode: 'production',
-    resolve: {
-        extensions: ['.js', '.jsx']
-    },
+    entry: path.join(__dirname, 'src', 'index.js'),
     plugins: [
         new HtmlWebpackPlugin({
-            hash: true,
-            template: "./public/index.html",
-            filename: './index.html'
-        })
+            template: 'public/index.html',
+            filename: "index.html"
+        }),
+        new webpack.HotModuleReplacementPlugin(),
     ],
-    externals: [nodeExternals()],
-    module: { // new concept, loaders
+    mode: 'production',
+    optimization: {
+        usedExports: true,
+        removeAvailableModules: false,
+        removeEmptyChunks: false,
+        splitChunks: false
+    },
+    output: {
+        filename: 'bundle.js',
+        path: path.join(__dirname, 'dist')
+    },
+    module: {
         rules: [
             {
-                test: /\.js|\.jsx$/,
-                loader: 'babel-loader', // loaders referenced
-                exclude: /node_modules/, // we do not need to transpile other libraries
-                query: require('./.babelrc'), // reference to babel rules
+                test: /\.(jsx|js)$/,
+                include: path.join(__dirname, 'src'),
+                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: 'babel-loader',
+                        options: {
+                            presets: [
+                                [
+                                    '@babel/preset-env', {
+                                    "targets": "defaults"
+                                }],
+                                '@babel/preset-react'
+                            ]
+                        }
+                    }
+                ]
             },
             {
                 test: /\.css$/,
-                exclude: /node_modules/, // we do not need to transpile other libraries
-                use: ["style-loader", "css-loader"],
-            }
+                use: [
+                    'style-loader',
+                    'css-loader'
+                ]
+            },
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/,
+                use: [
+                    'file-loader?publicPath=/&name=font/[name].[ext]'
+                ]
+            },
+            {
+                test: /\.(png|svg|jpg|gif)$/,
+                use: [
+                    'file-loader?publicPath=/&name=static/images/[name].[ext]'
+                ]
+            },
         ]
-    },
-}
+    }
+};

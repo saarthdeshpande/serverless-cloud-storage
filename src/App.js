@@ -1,11 +1,11 @@
 import React from 'react';
 import { Listing } from "@nteract/directory-listing";
 import getData from "./utils/downloadFromS3";
-import TreeView from './components/TreeView'
+import TreeView from './components/TreeView.jsx'
 import SearchField from "react-search-field"
-import TreeNode from './components/TreeNode'
+import TreeNode from './components/TreeNode.jsx'
 import {NotificationContainer} from 'react-notifications'
-import SearchList from './components/SearchList'
+import SearchList from './components/SearchList.js'
 import {Button} from 'react-bootstrap'
 
 import './App.css';

@@ -1,5 +1,5 @@
 import React from 'react'
-import TreeNode from './TreeNode'
+import TreeNode from './TreeNode.jsx'
 
 
 const TreeView = ({ tree, refreshTree }) => {
