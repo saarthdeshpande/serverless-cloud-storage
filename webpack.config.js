@@ -19,7 +19,6 @@ module.exports = {
             filename: './index.html'
         })
     ],
-    target: 'node',
     externals: [nodeExternals()],
     module: { // new concept, loaders
         rules: [
@@ -31,6 +30,7 @@ module.exports = {
             },
             {
                 test: /\.css$/,
+                exclude: /node_modules/, // we do not need to transpile other libraries
                 use: ["style-loader", "css-loader"],
             }
         ]
