@@ -14,7 +14,6 @@ import 'react-notifications/lib/notifications.css';
 
 
 class App extends React.Component {
-
     constructor() {
         super();
         this.state = {

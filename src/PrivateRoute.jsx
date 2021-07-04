@@ -1,4 +1,4 @@
-import { Route, Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import React from 'react'
 
 class PrivateRoute extends React.Component {
@@ -40,7 +40,7 @@ class PrivateRoute extends React.Component {
             <>
                 { !this.state.isLoading ?
                     (this.state.valid ?
-                        <Route exact path={'/'} component={this.props.component} />
+                            React.createElement(this.props.component)
                         : <Redirect to={'/login'} />
                     ) : <div />
                 }
