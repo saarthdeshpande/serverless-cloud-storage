@@ -1,6 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+
 
 module.exports = {
     entry: path.resolve(__dirname, 'src', 'index.js'),
@@ -13,13 +15,16 @@ module.exports = {
         new webpack.ProvidePlugin({
             "React": "react",
         }),
+        new webpack.DefinePlugin({'process.env.NODE_ENV': JSON.stringify("production")},),
+        new UglifyJsPlugin()
     ],
     mode: 'production',
     optimization:  {
         usedExports: true,
         removeAvailableModules: false,
         removeEmptyChunks: false,
-        splitChunks: false
+        splitChunks: false,
+        minimize: true
     },
     performance: {
         hints: false
