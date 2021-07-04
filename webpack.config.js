@@ -1,16 +1,24 @@
 const nodeExternals = require('webpack-node-externals');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require("path")
 
 module.exports = {
     entry: './src/index.js',
     output: {
         filename: 'bundle.js',
-        path: path.join(__dirname, "build/static/js")
+        path: path.join(__dirname, "dist/")
     },
     mode: 'production',
     resolve: {
         extensions: ['.js', '.jsx']
     },
+    plugins: [
+        new HtmlWebpackPlugin({
+            hash: true,
+            template: "./public/index.html",
+            filename: './index.html'
+        })
+    ],
     target: 'node',
     externals: [nodeExternals()],
     module: { // new concept, loaders

@@ -11,6 +11,7 @@
     "aws-sdk": "^2.935.0",
     "bootstrap": "^5.0.2",
     "firebase": "^8.7.0",
+    "html-webpack-plugin": "^4.3.0",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.1",
     "react-device-detect": "^1.17.0",
@@ -30,9 +31,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "npm run build:react && npm run build:bundle",
-    "build:react": "react-scripts build",
-    "build:bundle": "webpack --config webpack.config.js && cd build/static/js && find . ! -name 'bundle.js' -type f -exec rm -f {} + \n",
+    "build": "webpack --config webpack.config.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint src"
@@ -60,7 +59,7 @@
     "@babel/preset-env": "^7.1.6",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.4",
-    "webpack": "^4.25.1",
+    "webpack": "^4.40.1",
     "webpack-cli": "^3.1.2"
   }
 }
