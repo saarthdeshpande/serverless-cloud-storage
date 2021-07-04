@@ -1,6 +1,5 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const webpack = require('webpack');
 const isDevelopment = false;
 
@@ -12,6 +11,9 @@ module.exports = {
             filename: "index.html"
         }),
         new webpack.HotModuleReplacementPlugin(),
+        new webpack.ProvidePlugin({
+            "React": "react",
+        }),
     ],
     mode: 'production',
     optimization: {
