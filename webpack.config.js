@@ -1,20 +1,30 @@
+const nodeExternals = require('webpack-node-externals');
 const path = require("path")
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
-const glob = require("glob")
 
 module.exports = {
-    entry: {
-        "bundle.js": glob.sync("build/static/?(js|css)/main.*.?(js|css)").map(f => path.resolve(__dirname, f)),
-    },
+    entry: './src/index.js',
     output: {
-        filename: "bundle.min.js",
-        path: path.join(__dirname, 'build/static/js')
+        filename: 'bundle.js',
+        path: path.join(__dirname, "build/static/js")
     },
-    module: {
-        rules: [{
-            test: /\.css$/,
-            use: ["style-loader", "css-loader"],
-        }, ],
+    mode: 'production',
+    resolve: {
+        extensions: ['.js', '.jsx']
     },
-    plugins: [new UglifyJsPlugin()],
+    target: 'node',
+    externals: [nodeExternals()],
+    module: { // new concept, loaders
+        rules: [
+            {
+                test: /\.js|\.jsx$/,
+                loader: 'babel-loader', // loaders referenced
+                exclude: /node_modules/, // we do not need to transpile other libraries
+                query: require('./.babelrc'), // reference to babel rules
+            },
+            {
+                test: /\.css$/,
+                use: ["style-loader", "css-loader"],
+            }
+        ]
+    },
 }

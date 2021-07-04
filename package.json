@@ -25,13 +25,14 @@
     "styled-components": "^5.3.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "underscore": "^1.13.1",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "webpack-node-externals": "^3.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "npm run build:react && npm run build:bundle",
     "build:react": "react-scripts build",
-    "build:bundle": "webpack --config webpack.config.js && cd build/static/js && find . ! -name 'bundle.min.js' -type f -exec rm -f {} +\n",
+    "build:bundle": "webpack --config webpack.config.js && cd build/static/js && find . ! -name 'bundle.js' -type f -exec rm -f {} + \n",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint src"
@@ -55,6 +56,11 @@
     ]
   },
   "devDependencies": {
-    "webpack-cli": "^4.7.2"
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.4",
+    "webpack": "^4.25.1",
+    "webpack-cli": "^3.1.2"
   }
 }
