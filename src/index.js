@@ -4,13 +4,6 @@ import './index.css';
 import Routes from './Routes';
 import reportWebVitals from './reportWebVitals';
 
-(function(define) {
-    define(function(require) {
-        var _ = require('lodash');
-    });
-// eslint-disable-next-line no-undef
-}(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
-
 window.addEventListener("contextmenu", e => e.preventDefault());
 ReactDOM.render(
     <Routes />,

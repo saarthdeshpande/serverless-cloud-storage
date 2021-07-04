@@ -5,7 +5,7 @@ const path = require("path")
 module.exports = {
     entry: './src/index.js',
     output: {
-        filename: 'bundle.js',
+        filename: 'bundle.[fullhash].js',
         path: path.join(__dirname, "dist/"),
         libraryTarget: 'amd'
     },
