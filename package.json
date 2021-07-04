@@ -24,7 +24,7 @@
   },
   "scripts": {
     "start": "webpack-dev-server --host 0.0.0.0 --open --config webpack.config.js",
-    "build": "webpack --config webpack.config.js && cp -R public/ZipJS/ dist/ZipJS/",
+    "build": "webpack --config webpack.config.js && cp -R public/ZipJS/ dist/ZipJS/ && cp public/shscs.ico dist/shscs.ico",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint src"

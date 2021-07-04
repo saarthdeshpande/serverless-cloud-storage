@@ -61,7 +61,7 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(png|svg|jpg|gif)$/,
+                test: /\.(png|svg|jpe?g|gif)$/,
                 use: [
                     'file-loader?publicPath=/&name=static/images/[name].[ext]'
                 ]
