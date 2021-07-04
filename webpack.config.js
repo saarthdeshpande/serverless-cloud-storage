@@ -1,10 +1,9 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
-const isDevelopment = false;
 
 module.exports = {
-    entry: path.join(__dirname, 'src', 'index.js'),
+    entry: path.resolve(__dirname, 'src', 'index.js'),
     plugins: [
         new HtmlWebpackPlugin({
             template: 'public/index.html',
@@ -16,21 +15,24 @@ module.exports = {
         }),
     ],
     mode: 'production',
-    optimization: {
+    optimization:  {
         usedExports: true,
         removeAvailableModules: false,
         removeEmptyChunks: false,
         splitChunks: false
     },
+    performance: {
+        hints: false
+    },
+    devtool: false,
     output: {
         filename: 'bundle.js',
-        path: path.join(__dirname, 'dist')
+        path: path.resolve(__dirname, 'dist')
     },
     module: {
         rules: [
             {
                 test: /\.(jsx|js)$/,
-                include: path.join(__dirname, 'src'),
                 exclude: /node_modules/,
                 use: [
                     {
