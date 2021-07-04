@@ -20,7 +20,7 @@ module.exports = {
         })
     ],
     target: 'node',
-    externals: [nodeExternals()],
+    externals: [nodeExternals({importType: 'umd'})],
     module: { // new concept, loaders
         rules: [
             {
