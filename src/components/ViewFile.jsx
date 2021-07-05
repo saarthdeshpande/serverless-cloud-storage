@@ -1,8 +1,7 @@
 import React from "react";
 import { Document, Page } from 'react-pdf';
 import { pdfjs } from 'react-pdf';
-import Button from "react-bootstrap/esm/Button";
-import Modal from "react-bootstrap/esm/Modal";
+import {Modal, Button} from "react-bootstrap";
 import Jupyter from 'react-jupyter'
 import AWS_BUCKET from '../config/aws'
 
