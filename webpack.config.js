@@ -23,22 +23,8 @@ module.exports = {
         new UglifyJsPlugin({
             uglifyOptions: {
                 minimize: true,
-                mangle: false,
                 sourceMap: false,
                 warnings: false,
-                compress: {
-                    unused: true,
-                    dead_code: true, // big one--strip code that will never execute
-                    drop_debugger: true,
-                    conditionals: true,
-                    evaluate: true,
-                    drop_console: true, // strips console statements
-                    sequences: true,
-                    booleans: true,
-                },
-                output: {
-                    comments: false,
-                },
             }
         })
     ],
