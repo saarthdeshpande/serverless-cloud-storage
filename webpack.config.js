@@ -1,8 +1,9 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const dotenv = require('dotenv').config({path: __dirname + '/.env'});
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const CompressionPlugin = require('compression-webpack-plugin');
 
 
 module.exports = {
@@ -13,7 +14,6 @@ module.exports = {
             template: 'public/index.html',
             filename: "index.html"
         }),
-        new webpack.HotModuleReplacementPlugin(),
         new webpack.ProvidePlugin({
             "React": "react",
         }),
@@ -26,7 +26,15 @@ module.exports = {
                 sourceMap: false,
                 warnings: false,
             }
-        })
+        }),
+        new webpack.optimize.AggressiveMergingPlugin(),//Merge chunks
+        new CompressionPlugin({
+            filename: '[path].gz[query]',
+            algorithm: 'gzip',
+            test: /\.js$|\.css$|\.html$|\.eot?.+$|\.ttf?.+$|\.woff?.+$|\.svg?.+$/,
+            threshold: 10240,
+            minRatio: 0.8
+        }),
     ],
     optimization:  {
         usedExports: true,
