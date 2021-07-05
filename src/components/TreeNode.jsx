@@ -1,10 +1,10 @@
 import {useState} from 'react'
 import { Entry, Icon, Name } from "@nteract/directory-listing";
-import {Dropdown} from 'react-bootstrap'
+import Button from 'react-bootstrap/esm/Button'
+import Dropdown from 'react-bootstrap/esm/Dropdown'
 import UploadToS3 from "./UploadToS3.jsx";
 import DeleteFromS3 from "./DeleteFromS3.jsx";
 import { isMobile } from "react-device-detect";
-import { Button } from 'react-bootstrap'
 import { Draggable, Droppable } from 'react-drag-and-drop'
 import {NotificationManager} from 'react-notifications'
 import ViewFile from './ViewFile.jsx'

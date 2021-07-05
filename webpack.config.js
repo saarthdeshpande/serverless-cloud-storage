@@ -1,30 +1,46 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
+const dotenv = require('dotenv').config({path: __dirname + '/.env'});
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const CompressionPlugin = require('compression-webpack-plugin');
 
 
 module.exports = {
     entry: path.resolve(__dirname, 'src', 'index.js'),
+    mode: "production",
     plugins: [
         new HtmlWebpackPlugin({
             template: 'public/index.html',
             filename: "index.html"
         }),
-        new webpack.HotModuleReplacementPlugin(),
         new webpack.ProvidePlugin({
             "React": "react",
         }),
-        new webpack.DefinePlugin({'process.env.NODE_ENV': JSON.stringify("production")},),
-        new UglifyJsPlugin()
+        new webpack.DefinePlugin({
+            "process.env": JSON.stringify(dotenv.parsed)
+        },),
+        new UglifyJsPlugin({
+            uglifyOptions: {
+                minimize: true,
+                sourceMap: false,
+                warnings: false,
+            }
+        }),
+        new webpack.optimize.AggressiveMergingPlugin(),//Merge chunks
+        new CompressionPlugin({
+            filename: '[path].gz[query]',
+            algorithm: 'gzip',
+            test: /\.js$|\.css$|\.html$|\.eot?.+$|\.ttf?.+$|\.woff?.+$|\.svg?.+$/,
+            threshold: 10240,
+            minRatio: 0.8
+        }),
     ],
-    mode: 'production',
     optimization:  {
         usedExports: true,
         removeAvailableModules: false,
         removeEmptyChunks: false,
-        splitChunks: false,
-        minimize: true
+        splitChunks: false
     },
     performance: {
         hints: false

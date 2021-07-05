@@ -1,5 +1,7 @@
 import {useState} from 'react'
-import {Modal, Form, Button} from 'react-bootstrap'
+import Modal from 'react-bootstrap/esm/Modal'
+import Form from 'react-bootstrap/esm/Form'
+import Button from 'react-bootstrap/esm/Button'
 import './config/firebase'
 import firebase from "firebase/app";
 import "firebase/auth";
