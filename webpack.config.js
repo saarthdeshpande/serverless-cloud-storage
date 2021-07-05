@@ -16,7 +16,7 @@ module.exports = {
         new webpack.ProvidePlugin({
             "React": "react",
         }),
-        new webpack.DefinePlugin({'process.env': JSON.stringify(dotenv)},),
+        new webpack.DefinePlugin({'process.env': JSON.stringify(dotenv.parsed)},),
         new UglifyJsPlugin()
     ],
     mode: 'production',
