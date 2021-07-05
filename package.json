@@ -25,7 +25,7 @@
   },
   "scripts": {
     "start": "webpack-dev-server --host 0.0.0.0 --open --config webpack.config.js",
-    "build": "react-scripts build",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build -p",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint src"
