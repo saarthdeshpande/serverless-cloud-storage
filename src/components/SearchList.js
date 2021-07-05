@@ -2,7 +2,7 @@ import { Name, Entry, Icon } from "@nteract/directory-listing";
 import { useState } from "react";
 import DeleteFromS3 from "./DeleteFromS3.jsx"
 import { isMobile } from "react-device-detect";
-import {Dropdown} from 'react-bootstrap'
+import Dropdown from 'react-bootstrap/Dropdown'
 import ViewFile from './ViewFile.jsx'
 
 const Search = ({props}) => {

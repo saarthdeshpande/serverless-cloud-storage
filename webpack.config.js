@@ -2,10 +2,12 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const dotenv = require('dotenv').config({path: __dirname + '/.env'});
 
 
 module.exports = {
     entry: path.resolve(__dirname, 'src', 'index.js'),
+    mode: "production",
     plugins: [
         new HtmlWebpackPlugin({
             template: 'public/index.html',
@@ -15,15 +17,36 @@ module.exports = {
         new webpack.ProvidePlugin({
             "React": "react",
         }),
-        new webpack.DefinePlugin({'process.env.NODE_ENV': JSON.stringify("production")},),
-        new UglifyJsPlugin({minimize:true})
+        new webpack.DefinePlugin({
+            "process.env": JSON.stringify(dotenv.parsed)
+        },),
+        new UglifyJsPlugin({
+            uglifyOptions: {
+                minimize: true,
+                mangle: false,
+                sourceMap: false,
+                warnings: false,
+                compress: {
+                    unused: true,
+                    dead_code: true, // big one--strip code that will never execute
+                    drop_debugger: true,
+                    conditionals: true,
+                    evaluate: true,
+                    drop_console: true, // strips console statements
+                    sequences: true,
+                    booleans: true,
+                },
+                output: {
+                    comments: false,
+                },
+            }
+        })
     ],
     optimization:  {
         usedExports: true,
         removeAvailableModules: false,
         removeEmptyChunks: false,
-        splitChunks: false,
-        minimize: true
+        splitChunks: false
     },
     performance: {
         hints: false
