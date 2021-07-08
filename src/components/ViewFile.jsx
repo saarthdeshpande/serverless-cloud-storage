@@ -1,11 +1,15 @@
 import React from "react";
-import { Document, Page } from 'react-pdf';
-import { pdfjs } from 'react-pdf';
-import {Modal, Button} from "react-bootstrap";
-import Jupyter from 'react-jupyter'
+
+import { Document, Page, pdfjs } from 'react-pdf';
+
+import Button from "react-bootstrap/Button";
+import Jupyter from 'react-jupyter';
+import Modal from "react-bootstrap/Modal";
+
 import AWS_BUCKET from '../config/aws'
 
 import './ViewFile.css'
+
 
 class ViewButton extends React.Component{
     constructor(props) {

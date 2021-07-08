@@ -1,9 +1,12 @@
-import { Name, Entry, Icon } from "@nteract/directory-listing";
 import { useState } from "react";
-import DeleteFromS3 from "./DeleteFromS3.jsx"
+
+import Dropdown from 'react-bootstrap/Dropdown'
+import { Name, Entry, Icon } from "@nteract/directory-listing/";
 import { isMobile } from "react-device-detect";
-import {Dropdown} from 'react-bootstrap'
 import ViewFile from './ViewFile.jsx'
+
+import DeleteFromS3 from "./DeleteFromS3.jsx"
+
 
 const Search = ({props}) => {
     const [deleteFile, toggleDelete] = useState(false)

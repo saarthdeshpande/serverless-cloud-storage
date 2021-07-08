@@ -1,12 +1,19 @@
 import {useState} from 'react'
-import {Modal, Form, Button} from 'react-bootstrap'
-import './config/firebase'
-import firebase from "firebase/app";
-import "firebase/auth";
+
 import {withRouter} from 'react-router-dom'
 import {NotificationManager, NotificationContainer} from 'react-notifications'
 
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
+
+import firebase from "firebase/app";
+import "firebase/auth";
+
+import './config/firebase'
+
 import 'react-notifications/lib/notifications.css';
+
 
 function Login({ history }) {
     const [email, setEmail] = useState("")

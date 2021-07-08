@@ -1,6 +1,7 @@
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+
 import App from './App.js'
 import Login from './Login.jsx'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import PrivateRoute from './PrivateRoute.jsx'
 
 export default function Routes() {

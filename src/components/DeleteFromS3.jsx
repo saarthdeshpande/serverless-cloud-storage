@@ -1,6 +1,9 @@
-import AWS_BUCKET from "../config/aws";
-import { Modal, Button } from "react-bootstrap";
 import React from 'react';
+
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+
+import AWS_BUCKET from "../config/aws";
 
 
 const DeleteFromS3 = (props) => {

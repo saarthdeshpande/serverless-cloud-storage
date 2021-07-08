@@ -1,5 +1,5 @@
-import { Redirect } from 'react-router-dom'
 import React from 'react'
+import { Redirect } from 'react-router-dom'
 
 class PrivateRoute extends React.Component {
     constructor(props) {

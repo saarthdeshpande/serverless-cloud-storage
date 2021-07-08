@@ -1,9 +1,11 @@
 import React , {useState} from 'react';
-import { Modal, Button } from "react-bootstrap";
-import AWS_BUCKET from "../config/aws";
-
 
 import { isMobile, isBrowser } from "react-device-detect";
+
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+
+import AWS_BUCKET from "../config/aws";
 
 
 const UploadToS3 = (props) => {
