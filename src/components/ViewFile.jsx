@@ -177,7 +177,7 @@ class ViewButton extends React.Component{
             case '.ipynb':
                 return (
                     <Jupyter
-                        notebook={JSON.parse(this.state.fileUrl)}
+                        notebook={JSON.parse(this.state.text)}
                         showCode={true} // optional
                         loadMathjax={true} // optional
                     />
