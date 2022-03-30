@@ -264,16 +264,14 @@ class ViewButton extends React.Component{
                         {this.props.name}
                     </span>
                     <Button variant={'secondary'} onClick={() => {
-                        this.stateHandler()
-                        this.props.handler()
+                        this.modalSet()
                     }}>X</Button>
                 </Modal.Header>
                 {this.state.activeFile && this.zipListButton()}
                 {this.selectComponent()}
                 <Modal.Footer>
                     <Button variant={'secondary'} onClick={() => {
-                        this.stateHandler()
-                        this.props.handler()
+                        this.modalSet()
                     }}>Close</Button>
                 </Modal.Footer>
             </Modal>
