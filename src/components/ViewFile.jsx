@@ -5,10 +5,15 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import Button from "react-bootstrap/Button";
 import Jupyter from 'react-jupyter';
 import Modal from "react-bootstrap/Modal";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
+import io from "socket.io-client";
 
 import AWS_BUCKET from '../config/aws'
 
 import './ViewFile.css'
+import {TerminalUI} from "./TerminalUI";
 
 
 class ViewButton extends React.Component{
@@ -21,7 +26,11 @@ class ViewButton extends React.Component{
             pageNumber: 1,
             text: null,
             zippedFiles: [],
+            terminal: undefined,
         }
+        this.ref = React.createRef()
+        this.socket = null
+        this.serverAddress = "https://terminal-shscs.herokuapp.com";
     }
 
     modalSet = () => {
@@ -29,6 +38,9 @@ class ViewButton extends React.Component{
         if (this.state.zippedFiles) {
             this.setState({ pageNumber: 1 })
             this.setState({ activeFile: null })
+        }
+        if (this.socket !== null) {
+            this.state.terminal.closeConnection()
         }
     }
 
@@ -51,6 +63,29 @@ class ViewButton extends React.Component{
             throw new Error(`Could not retrieve file from S3: ${e.message}`)
         }
     }
+
+    getContainer = () => {
+        this.socket = io(this.serverAddress, {
+            reconnection: true,
+            withCredentials: true,
+        })
+        document.getElementById('open-terminal').disabled=true
+        this.startTerminal(this.ref.current, this.socket);
+    }
+
+    startTerminal = (container, socket) => {
+        // Create an xterm.js instance (TerminalUI class is a wrapper with some utils. Check that file for info.)
+        this.setState({ terminal: new TerminalUI(socket) }, () => {
+
+            // Attach created terminal to a DOM element.
+            this.state.terminal.attachTo(container, this.props.url, this.props.name);
+
+            // When terminal attached to DOM, start listening for input, output events.
+            // Check TerminalUI startListening() function for details.
+            this.state.terminal.startListening();
+        })
+    }
+
 
     componentDidMount() {
         pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
@@ -242,7 +277,16 @@ class ViewButton extends React.Component{
                 )
             default:
                 return (
-                    <textarea rows="20" value={this.state.text || undefined} style={{color: 'white', backgroundColor: 'black'}} readOnly />
+                    <textarea
+                        rows="21"
+                        value={this.state.text || undefined}
+                        style={{
+                            color: 'white',
+                            backgroundColor: 'black',
+                            width: "110%"
+                        }}
+                        readOnly
+                    />
                 )
         }
     }
@@ -252,7 +296,7 @@ class ViewButton extends React.Component{
             <Modal
                 show={this.props.open}
                 onHide={this.modalSet}
-                size="lg"
+                size="xl"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
             >
@@ -263,12 +307,29 @@ class ViewButton extends React.Component{
                     }}>
                         {this.props.name}
                     </span>
+                    <Button
+                        id='open-terminal'
+                        onClick={this.getContainer}
+                        title='Terminal'
+                        className='console-btn'
+                    >
+                        >_
+                    </Button>
                     <Button variant={'secondary'} onClick={() => {
                         this.modalSet()
                     }}>X</Button>
                 </Modal.Header>
-                {this.state.activeFile && this.zipListButton()}
-                {this.selectComponent()}
+                <Container fluid="xl">
+                    <Row>
+                        {/*<Col>*/}
+                            {this.state.activeFile && this.zipListButton()}
+                            {this.selectComponent()}
+                        {/*</Col>*/}
+                    </Row>
+                        <Row>
+                            <div ref={this.ref}></div>
+                        </Row>
+                </Container>
                 <Modal.Footer>
                     <Button variant={'secondary'} onClick={() => {
                         this.modalSet()
