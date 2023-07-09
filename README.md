@@ -62,3 +62,33 @@ Host your own cloud storage at solely S3 rates, i.e., 50 TB /month at 1.6 INR/GB
     ]
 }
 ```
+
+## Sync with a Local Folder
+
+* `aws configure` - enter all access details for your bucket
+* vi `~/local-to-s3.sh` and paste this:
+```
+#!/bin/bash
+LOCAL_FOLDER="<abs-path-to-your-local-folder>"
+LTIME=$(stat -f%Z $LOCAL_FOLDER)
+while true
+do
+  ATIME=$(stat -f%Z $LOCAL_FOLDER)
+  if [[ "$ATIME" != "$LTIME" ]]; then
+        echo "$(date): Syncing Changes" >> ~/logs/log.$(date +%B%Y)
+        /opt/homebrew/bin/aws s3 sync $LOCAL_FOLDER s3://<BUCKET_NAME> --delete >> ~/logs/log.$(date +%B%Y)
+        LTIME=$ATIME
+  fi
+  sleep 2
+done
+
+```
+
+* Replace the value for `LOCAL_FOLDER` with the folder you want to sync your S3 bucket with.
+* To keep this script always running in the background, run `crontab -e` and add the line: `@reboot local-to-s3.sh`.
+
+**NOTE**: This will only sync your local changes to the S3 bucket. 
+
+* To sync S3 bucket changes to your local folder, run `crontab -e` and add the line: `*/30 * * * * aws s3 sync s3://<BUCKET_NAME> <abs-path-to-your-local-folder> --delete >> ~/logs/s3-to-local/log.$(date +%B%Y)`.
+* This last sync isn't ideal and may lead to temporarily inconsistent data across the local folder and S3 bucket. Open to suggestions!
+
